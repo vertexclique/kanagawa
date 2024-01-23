@@ -1,9 +1,10 @@
-use async_std::io::{self, prelude::*};
-use async_std::task::{Context, Poll};
+use std::io;
 use routefinder::Captures;
 
 use std::ops::Index;
 use std::pin::Pin;
+use std::task::{Context, Poll};
+use futures::AsyncRead;
 
 #[cfg(feature = "cookies")]
 use crate::cookies::CookieData;
@@ -580,7 +581,7 @@ impl<State> AsMut<http::Headers> for Request<State> {
     }
 }
 
-impl<State> Read for Request<State> {
+impl<State> AsyncRead for Request<State> {
     fn poll_read(
         self: Pin<&mut Self>,
         cx: &mut Context<'_>,

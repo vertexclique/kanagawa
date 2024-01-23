@@ -1,15 +1,18 @@
 //! An HTTP server
 
-use async_std::io;
-use async_std::sync::Arc;
-use kv_log_macro::{info, trace};
+use std::io;
+use std::net::{TcpListener, ToSocketAddrs};
+use std::sync::Arc;
+use futures_util::StreamExt;
+use kv_log_macro::{error, info, trace};
+use nuclei::Handle;
 
 #[cfg(feature = "cookies")]
 use crate::cookies;
-use crate::listener::{Listener, ToListener};
 use crate::middleware::{Middleware, Next};
 use crate::router::{Router, Selection};
 use crate::{Endpoint, Request, Route};
+use crate::errors::*;
 
 /// An HTTP server.
 ///
@@ -46,7 +49,7 @@ impl Server<()> {
     /// # Examples
     ///
     /// ```no_run
-    /// # use async_std::task::block_on;
+    /// # use nuclei::block_on;
     /// # fn main() -> Result<(), std::io::Error> { block_on(async {
     /// #
     /// let mut app = tide::new();
@@ -203,13 +206,32 @@ where
     /// #
     /// # Ok(()) }) }
     /// ```
-    pub async fn listen<L: ToListener<State>>(self, listener: L) -> io::Result<()> {
-        let mut listener = listener.to_listener()?;
-        listener.bind(self).await?;
-        for info in listener.info().iter() {
-            info!("Server listening on {}", info);
+    pub async fn listen<T: ToSocketAddrs>(self, listener: T) -> Result<()> {
+        let mut listener = Handle::<TcpListener>::bind(listener)?;
+        let host = format!("http://{}", listener.get_ref().local_addr()?);
+        println!("Listening on {}", host);
+
+        let mut streams = listener.accept_multi().await?;
+
+        while let Some(stream) = streams.next().await {
+            let stream = async_dup::Arc::new(stream);
+            let server = self.clone();
+            let local_addr = stream.local_addr().ok();
+            let peer_addr = stream.peer_addr().ok();
+
+            nuclei::spawn(async move {
+                let fut = async_h1::accept(stream, |mut req| async {
+                    req.set_local_addr(local_addr);
+                    req.set_peer_addr(peer_addr);
+                    server.respond(req).await
+                });
+
+                if let Err(error) = fut.await {
+                    error!("async-h1 error", { error: error.to_string() });
+                }
+            }).detach();
         }
-        listener.accept().await?;
+
         Ok(())
     }
 
@@ -242,13 +264,11 @@ where
     /// #
     /// # Ok(()) }) }
     /// ```
-    pub async fn bind<L: ToListener<State>>(
+    pub async fn bind<T: ToSocketAddrs>(
         self,
-        listener: L,
-    ) -> io::Result<<L as ToListener<State>>::Listener> {
-        let mut listener = listener.to_listener()?;
-        listener.bind(self).await?;
-        Ok(listener)
+        listener: T,
+    ) -> Result<Handle<TcpListener>> {
+        Ok(Handle::<TcpListener>::bind(listener)?)
     }
 
     /// Respond to a `Request` with a `Response`.

@@ -1,6 +1,5 @@
 use crate::{Body, Endpoint, Request, Response, Result, StatusCode};
 
-use async_std::path::PathBuf as AsyncPathBuf;
 use kv_log_macro::{info, warn};
 
 use std::path::{Path, PathBuf};
@@ -42,7 +41,7 @@ where
 
         info!("Requested file: {:?}", file_path);
 
-        let file_path = AsyncPathBuf::from(file_path);
+        let file_path = PathBuf::from(file_path);
         if !file_path.starts_with(&self.dir) {
             warn!("Unauthorized attempt to read: {:?}", file_path);
             Ok(Response::new(StatusCode::Forbidden))

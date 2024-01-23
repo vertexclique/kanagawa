@@ -2,12 +2,12 @@ use crate::{Body, Endpoint, Request, Response, Result, StatusCode};
 use std::io;
 use std::path::Path;
 
-use async_std::path::PathBuf as AsyncPathBuf;
+use std::path::PathBuf;
 use async_trait::async_trait;
 use kv_log_macro::warn;
 
 pub(crate) struct ServeFile {
-    path: AsyncPathBuf,
+    path: PathBuf,
 }
 
 impl ServeFile {
@@ -15,7 +15,7 @@ impl ServeFile {
     pub(crate) fn init(path: impl AsRef<Path>) -> io::Result<Self> {
         let file = path.as_ref().to_owned().canonicalize()?;
         Ok(Self {
-            path: AsyncPathBuf::from(file),
+            path: PathBuf::from(file),
         })
     }
 }
@@ -73,7 +73,7 @@ mod test {
     #[async_std::test]
     async fn should_serve_404_when_file_missing() {
         let serve_file = ServeFile {
-            path: AsyncPathBuf::from("gone/file"),
+            path: PathBuf::from("gone/file"),
         };
 
         let res: Response = serve_file.call(request("static/foo")).await.unwrap().into();

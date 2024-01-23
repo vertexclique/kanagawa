@@ -1,7 +1,4 @@
-#[async_std::main]
-async fn main() -> Result<(), std::io::Error> {
-    femme::start();
-
+fn main() {
     let mut app = tide::new();
     app.with(tide::log::LogMiddleware::new());
 

@@ -77,7 +77,6 @@ mod router;
 mod server;
 
 pub mod convert;
-pub mod listener;
 pub mod log;
 pub mod prelude;
 pub mod security;
@@ -87,7 +86,9 @@ pub mod utils;
 pub mod sessions;
 #[cfg(feature = "sse")]
 pub mod sse;
+pub mod errors;
 
+use futures_util::future;
 pub use endpoint::Endpoint;
 pub use middleware::{Middleware, Next};
 pub use redirect::Redirect;
@@ -98,13 +99,15 @@ pub use route::Route;
 pub use server::Server;
 
 pub use http_types::{self as http, Body, Error, Method, Status, StatusCode};
+pub use nuclei::*;
+pub use crate::errors::*;
 
 /// Create a new Tide server.
 ///
 /// # Examples
 ///
 /// ```no_run
-/// # use async_std::task::block_on;
+/// # use nuclei::block_on;
 /// # fn main() -> Result<(), std::io::Error> { block_on(async {
 /// #
 /// let mut app = tide::new();
@@ -115,6 +118,8 @@ pub use http_types::{self as http, Body, Error, Method, Status, StatusCode};
 /// ```
 #[must_use]
 pub fn new() -> server::Server<()> {
+    spawn_blocking(|| drive(future::pending::<()>())).detach();
+
     Server::new()
 }
 
