@@ -1,27 +1,27 @@
-use tide::http::Cookie;
-use tide::*;
+use kanagawa::http::Cookie;
+use kanagawa::*;
 
-/// Tide will use the the `Cookies`'s `Extract` implementation to build this parameter.
+/// Kanagawa will use the the `Cookies`'s `Extract` implementation to build this parameter.
 ///
-async fn retrieve_cookie(req: Request<()>) -> tide::Result<String> {
+async fn retrieve_cookie(req: Request<()>) -> kanagawa::Result<String> {
     Ok(format!("hello cookies: {:?}", req.cookie("hello").unwrap()))
 }
 
-async fn insert_cookie(_req: Request<()>) -> tide::Result {
+async fn insert_cookie(_req: Request<()>) -> kanagawa::Result {
     let mut res = Response::new(StatusCode::Ok);
     res.insert_cookie(Cookie::new("hello", "world"));
     Ok(res)
 }
 
-async fn remove_cookie(_req: Request<()>) -> tide::Result {
+async fn remove_cookie(_req: Request<()>) -> kanagawa::Result {
     let mut res = Response::new(StatusCode::Ok);
     res.remove_cookie(Cookie::named("hello"));
     Ok(res)
 }
 
 async fn server() -> Result<()> {
-    let mut app = tide::new();
-    app.with(tide::log::LogMiddleware::new());
+    let mut app = kanagawa::new();
+    app.with(kanagawa::log::LogMiddleware::new());
 
     app.at("/").get(retrieve_cookie);
     app.at("/set").get(insert_cookie);
@@ -31,6 +31,6 @@ async fn server() -> Result<()> {
     Ok(())
 }
 
-fn main() -> tide::Result<()> {
+fn main() -> kanagawa::Result<()> {
     block_on(server())
 }

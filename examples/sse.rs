@@ -1,8 +1,8 @@
-use tide::{*, sse};
+use kanagawa::{*, sse};
 
 async fn server() -> Result<()> {
-    let mut app = tide::new();
-    app.with(tide::log::LogMiddleware::new());
+    let mut app = kanagawa::new();
+    app.with(kanagawa::log::LogMiddleware::new());
     app.at("/sse").get(sse::endpoint(|_req, sender| async move {
         sender.send("fruit", "banana", None).await?;
         sender.send("fruit", "apple", None).await?;

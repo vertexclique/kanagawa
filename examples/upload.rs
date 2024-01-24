@@ -6,8 +6,8 @@ use std::{fs::OpenOptions, io};
 use std::fs::File;
 use kv_log_macro::info;
 use tempfile::TempDir;
-use tide::prelude::*;
-use tide::*;
+use kanagawa::prelude::*;
+use kanagawa::*;
 use futures::AsyncWriteExt;
 
 #[derive(Clone)]
@@ -28,8 +28,8 @@ impl TempDirState {
 }
 
 async fn server() -> Result<()> {
-    let mut app = tide::with_state(TempDirState::try_new()?);
-    app.with(tide::log::LogMiddleware::new());
+    let mut app = kanagawa::with_state(TempDirState::try_new()?);
+    app.with(kanagawa::log::LogMiddleware::new());
 
     // To test this example:
     // $ cargo run --example upload

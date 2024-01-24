@@ -5,7 +5,7 @@ mod test_utils;
 use test_utils::ServerTestingExt;
 
 #[async_std::test]
-async fn log_tests() -> tide::Result<()> {
+async fn log_tests() -> kanagawa::Result<()> {
     let mut logger = logtest::start();
     test_server_listen(&mut logger).await;
     test_only_log_once(&mut logger).await?;
@@ -14,7 +14,7 @@ async fn log_tests() -> tide::Result<()> {
 
 async fn test_server_listen(logger: &mut logtest::Logger) {
     let port = test_utils::find_port().await;
-    let app = tide::new();
+    let app = kanagawa::new();
     let res = app
         .listen(("127.0.0.1", port))
         .timeout(Duration::from_millis(60))
@@ -30,11 +30,11 @@ async fn test_server_listen(logger: &mut logtest::Logger) {
     );
 }
 
-async fn test_only_log_once(logger: &mut logtest::Logger) -> tide::Result<()> {
-    let mut app = tide::new();
-    app.with(tide::log::LogMiddleware::new());
+async fn test_only_log_once(logger: &mut logtest::Logger) -> kanagawa::Result<()> {
+    let mut app = kanagawa::new();
+    app.with(kanagawa::log::LogMiddleware::new());
     app.at("/").nest({
-        let mut app = tide::new();
+        let mut app = kanagawa::new();
         app.at("/").get(|_| async { Ok("nested") });
         app
     });

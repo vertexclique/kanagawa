@@ -108,12 +108,12 @@ impl<'a, State: Clone + Send + Sync + 'static> Route<'a, State> {
     /// ```no_run
     /// #[async_std::main]
     /// async fn main() -> Result<(), std::io::Error> {
-    ///     let mut app = tide::new();
+    ///     let mut app = kanagawa::new();
     ///     app.at("/hello").nest({
-    ///         let mut example = tide::with_state("world");
+    ///         let mut example = kanagawa::with_state("world");
     ///         example
     ///             .at("/")
-    ///             .get(|req: tide::Request<&'static str>| async move {
+    ///             .get(|req: kanagawa::Request<&'static str>| async move {
     ///                 Ok(format!("Hello {state}!", state = req.state()))
     ///             });
     ///         example
@@ -158,7 +158,7 @@ impl<'a, State: Clone + Send + Sync + 'static> Route<'a, State> {
     /// ```no_run
     /// #[async_std::main]
     /// async fn main() -> Result<(), std::io::Error> {
-    ///     let mut app = tide::new();
+    ///     let mut app = kanagawa::new();
     ///     app.at("/images/*").serve_dir("public/images/")?;
     ///     app.listen("127.0.0.1:8080").await?;
     ///     Ok(())

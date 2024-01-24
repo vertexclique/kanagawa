@@ -1,11 +1,11 @@
 use std::io::ErrorKind;
 
-use tide::utils::After;
-use tide::*;
+use kanagawa::utils::After;
+use kanagawa::*;
 
 async fn server() -> Result<()> {
-    let mut app = tide::new();
-    app.with(tide::log::LogMiddleware::new());
+    let mut app = kanagawa::new();
+    app.with(kanagawa::log::LogMiddleware::new());
 
     app.with(After(|mut res: Response| async {
         if let Some(err) = res.downcast_error::<std::io::Error>() {
@@ -28,6 +28,6 @@ async fn server() -> Result<()> {
     Ok(())
 }
 
-fn main() -> tide::Result<()> {
+fn main() -> kanagawa::Result<()> {
     block_on(server())
 }

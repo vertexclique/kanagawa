@@ -4,9 +4,9 @@ use std::sync::atomic::{AtomicUsize, Ordering};
 use std::sync::Arc;
 
 use kv_log_macro::trace;
-use tide::http::mime;
-use tide::utils::{After, Before};
-use tide::*;
+use kanagawa::http::mime;
+use kanagawa::utils::{After, Before};
+use kanagawa::*;
 
 #[derive(Debug)]
 struct User {
@@ -61,7 +61,7 @@ impl RequestCounterMiddleware {
 
 struct RequestCount(usize);
 
-#[tide::utils::async_trait]
+#[kanagawa::utils::async_trait]
 impl<State: Clone + Send + Sync + 'static> Middleware<State> for RequestCounterMiddleware {
     async fn handle(&self, mut req: Request<State>, next: Next<'_, State>) -> Result {
         let count = self.requests_counted.fetch_add(1, Ordering::Relaxed);
@@ -92,7 +92,7 @@ const INTERNAL_SERVER_ERROR_HTML_PAGE: &str = "<html><body>
 
 
 async fn server() -> Result<()> {
-    let mut app = tide::with_state(UserDatabase);
+    let mut app = kanagawa::with_state(UserDatabase);
 
     app.with(After(|response: Response| async move {
         let response = match response.status() {

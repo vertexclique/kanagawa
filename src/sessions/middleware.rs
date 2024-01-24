@@ -16,34 +16,34 @@ use kv_log_macro::error;
 const BASE64_DIGEST_LEN: usize = 44;
 
 /// # Middleware to enable sessions.
-/// See [sessions](crate::sessions) for an overview of tide's approach to sessions.
+/// See [sessions](crate::sessions) for an overview of kanagawa's approach to sessions.
 ///
 /// ## Example
 /// ```rust
 /// # async_std::task::block_on(async {
-/// let mut app = tide::new();
+/// let mut app = kanagawa::new();
 ///
-/// app.with(tide::sessions::SessionMiddleware::new(
-///     tide::sessions::MemoryStore::new(),
-///     b"we recommend you use std::env::var(\"TIDE_SECRET\").unwrap().as_bytes() instead of a fixed value"
+/// app.with(kanagawa::sessions::SessionMiddleware::new(
+///     kanagawa::sessions::MemoryStore::new(),
+///     b"we recommend you use std::env::var(\"KANAGAWA_SECRET\").unwrap().as_bytes() instead of a fixed value"
 /// ));
 ///
-/// app.with(tide::utils::Before(|mut request: tide::Request<()>| async move {
+/// app.with(kanagawa::utils::Before(|mut request: kanagawa::Request<()>| async move {
 ///     let session = request.session_mut();
 ///     let visits: usize = session.get("visits").unwrap_or_default();
 ///     session.insert("visits", visits + 1).unwrap();
 ///     request
 /// }));
 ///
-/// app.at("/").get(|req: tide::Request<()>| async move {
+/// app.at("/").get(|req: kanagawa::Request<()>| async move {
 ///     let visits: usize = req.session().get("visits").unwrap();
 ///     Ok(format!("you have visited this website {} times", visits))
 /// });
 ///
 /// app.at("/reset")
-///     .get(|mut req: tide::Request<()>| async move {
+///     .get(|mut req: kanagawa::Request<()>| async move {
 ///         req.session_mut().destroy();
-///         Ok(tide::Redirect::new("/"))
+///         Ok(kanagawa::Redirect::new("/"))
 ///      });
 /// # })
 /// ```
@@ -144,7 +144,7 @@ impl<Store: SessionStore> SessionMiddleware<Store> {
     ///
     /// The defaults for SessionMiddleware are:
     /// * cookie path: "/"
-    /// * cookie name: "tide.sid"
+    /// * cookie name: "kanagawa.sid"
     /// * session ttl: one day
     /// * secure: request.scheme == 'https'
     /// * same site: strict
@@ -158,10 +158,10 @@ impl<Store: SessionStore> SessionMiddleware<Store> {
     /// security:
     ///
     /// ```rust
-    /// # use tide::http::cookies::SameSite;
+    /// # use kanagawa::http::cookies::SameSite;
     /// # use std::time::Duration;
-    /// # use tide::sessions::{SessionMiddleware, MemoryStore};
-    /// let mut app = tide::new();
+    /// # use kanagawa::sessions::{SessionMiddleware, MemoryStore};
+    /// let mut app = kanagawa::new();
     /// app.with(
     ///     SessionMiddleware::new(MemoryStore::new(), b"please do not hardcode your secret")
     ///         .with_cookie_name("custom.cookie.name")
@@ -178,7 +178,7 @@ impl<Store: SessionStore> SessionMiddleware<Store> {
             store,
             save_unchanged: true,
             cookie_path: "/".into(),
-            cookie_name: "tide.sid".into(),
+            cookie_name: "kanagawa.sid".into(),
             cookie_domain: None,
             secure: None,
             same_site_policy: SameSite::Lax,
@@ -206,9 +206,9 @@ impl<Store: SessionStore> SessionMiddleware<Store> {
 
     /// Sets the name of the cookie that the session is stored with or in.
     ///
-    /// If you are running multiple tide applications on the same
+    /// If you are running multiple kanagawa applications on the same
     /// domain, you will need different values for each
-    /// application. The default value is "tide.sid"
+    /// application. The default value is "kanagawa.sid"
     pub fn with_cookie_name(mut self, cookie_name: impl AsRef<str>) -> Self {
         self.cookie_name = cookie_name.as_ref().to_owned();
         self

@@ -9,7 +9,7 @@ use crate::{Middleware, Request, Response};
 /// An HTTP request handler.
 ///
 /// This trait is automatically implemented for `Fn` types, and so is rarely implemented
-/// directly by Tide users.
+/// directly by Kanagawa users.
 ///
 /// In practice, endpoints are functions that take a `Request<State>` as an argument and
 /// return a type `T` that implements `Into<Response>`.
@@ -19,11 +19,11 @@ use crate::{Middleware, Request, Response};
 /// A simple endpoint that is invoked on a `GET` request and returns a `String`:
 ///
 /// ```no_run
-/// async fn hello(_req: tide::Request<()>) -> tide::Result<String> {
+/// async fn hello(_req: kanagawa::Request<()>) -> kanagawa::Result<String> {
 ///     Ok(String::from("hello"))
 /// }
 ///
-/// let mut app = tide::Server::new();
+/// let mut app = kanagawa::Server::new();
 /// app.at("/hello").get(hello);
 /// ```
 ///
@@ -31,15 +31,15 @@ use crate::{Middleware, Request, Response};
 ///
 /// ```no_run
 /// # use core::future::Future;
-/// fn hello(_req: tide::Request<()>) -> impl Future<Output = tide::Result<String>> {
+/// fn hello(_req: kanagawa::Request<()>) -> impl Future<Output = kanagawa::Result<String>> {
 ///     async_std::future::ready(Ok(String::from("hello")))
 /// }
 ///
-/// let mut app = tide::Server::new();
+/// let mut app = kanagawa::Server::new();
 /// app.at("/hello").get(hello);
 /// ```
 ///
-/// Tide routes will also accept endpoints with `Fn` signatures of this form, but using the `async` keyword has better ergonomics.
+/// Kanagawa routes will also accept endpoints with `Fn` signatures of this form, but using the `async` keyword has better ergonomics.
 #[async_trait]
 pub trait Endpoint<State: Clone + Send + Sync + 'static>: Send + Sync + 'static {
     /// Invoke the endpoint within the given context

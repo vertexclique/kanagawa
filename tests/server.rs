@@ -4,14 +4,14 @@ use async_std::task;
 use std::time::Duration;
 
 use serde::{Deserialize, Serialize};
-use tide::{Body, Request};
+use kanagawa::{Body, Request};
 
 #[test]
-fn hello_world() -> tide::Result<()> {
+fn hello_world() -> kanagawa::Result<()> {
     task::block_on(async {
         let port = test_utils::find_port().await;
         let server = task::spawn(async move {
-            let mut app = tide::new();
+            let mut app = kanagawa::new();
             app.at("/").get(move |mut req: Request<()>| async move {
                 assert_eq!(req.body_string().await.unwrap(), "nori".to_string());
                 assert!(req.local_addr().unwrap().contains(&port.to_string()));
@@ -38,11 +38,11 @@ fn hello_world() -> tide::Result<()> {
 }
 
 #[test]
-fn echo_server() -> tide::Result<()> {
+fn echo_server() -> kanagawa::Result<()> {
     task::block_on(async {
         let port = test_utils::find_port().await;
         let server = task::spawn(async move {
-            let mut app = tide::new();
+            let mut app = kanagawa::new();
             app.at("/").get(|req| async move { Ok(req) });
 
             app.listen(("localhost", port)).await?;
@@ -65,7 +65,7 @@ fn echo_server() -> tide::Result<()> {
 }
 
 #[test]
-fn json() -> tide::Result<()> {
+fn json() -> kanagawa::Result<()> {
     #[derive(Deserialize, Serialize)]
     struct Counter {
         count: usize,
@@ -74,7 +74,7 @@ fn json() -> tide::Result<()> {
     task::block_on(async {
         let port = test_utils::find_port().await;
         let server = task::spawn(async move {
-            let mut app = tide::new();
+            let mut app = kanagawa::new();
             app.at("/").get(|mut req: Request<()>| async move {
                 let mut counter: Counter = req.body_json().await.unwrap();
                 assert_eq!(counter.count, 0);

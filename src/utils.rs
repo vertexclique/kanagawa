@@ -12,10 +12,10 @@ use std::future::Future;
 /// # Examples
 ///
 /// ```rust
-/// use tide::{utils, Request};
+/// use kanagawa::{utils, Request};
 /// use std::time::Instant;
 ///
-/// let mut app = tide::new();
+/// let mut app = kanagawa::new();
 /// app.with(utils::Before(|mut request: Request<()>| async move {
 ///     request.set_ext(Instant::now());
 ///     request
@@ -45,9 +45,9 @@ where
 /// # Examples
 ///
 /// ```rust
-/// use tide::{utils, http, Response};
+/// use kanagawa::{utils, http, Response};
 ///
-/// let mut app = tide::new();
+/// let mut app = kanagawa::new();
 /// app.with(utils::After(|res: Response| async move {
 ///     match res.status() {
 ///         http::StatusCode::NotFound => Ok("Page not found".into()),

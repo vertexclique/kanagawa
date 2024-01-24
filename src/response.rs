@@ -47,7 +47,7 @@ impl Response {
     ///
     /// # Example:
     /// ```rust
-    /// # use tide::{StatusCode, Response, http::mime};
+    /// # use kanagawa::{StatusCode, Response, http::mime};
     /// # async_std::task::block_on(async move {
     /// let mut response = Response::builder(203)
     ///     .body("<html>hi</html>")
@@ -80,20 +80,20 @@ impl Response {
     ///
     /// # Example:
     /// ```rust
-    /// # use tide::{StatusCode, Response};
+    /// # use kanagawa::{StatusCode, Response};
     /// let mut response = Response::new(StatusCode::Ok);
     ///
     /// response.set_status(418); // the status can be a valid u16 http status code
     /// assert_eq!(response.status(), StatusCode::ImATeapot);
     ///
-    /// response.set_status(StatusCode::NonAuthoritativeInformation); // or a tide::StatusCode
+    /// response.set_status(StatusCode::NonAuthoritativeInformation); // or a kanagawa::StatusCode
     /// assert_eq!(response.status(), StatusCode::NonAuthoritativeInformation);
     /// ```
     /// # Panics
     /// `set_status` will panic if the status argument cannot be successfully converted into a StatusCode.
     ///
     /// ```should_panic
-    /// # use tide::Response;
+    /// # use kanagawa::Response;
     /// Response::new(200).set_status(210); // this is not an established status code and will panic
     /// ```
     pub fn set_status<S>(&mut self, status: S)
@@ -216,7 +216,7 @@ impl Response {
     /// # fn main() -> Result<(), Box<dyn std::error::Error + Send + Sync + 'static>> {
     /// # async_std::task::block_on(async {
     /// #
-    /// use tide::Response;
+    /// use kanagawa::Response;
     ///
     /// let mut req = Response::new(200);
     /// req.set_body("Hello, Nori!");
@@ -248,9 +248,9 @@ impl Response {
     ///
     /// ```no_run
     /// # use serde::{Deserialize, Serialize};
-    /// # use tide::Response;
+    /// # use kanagawa::Response;
     /// # #[async_std::main]
-    /// # async fn main() -> tide::Result<()> {
+    /// # async fn main() -> kanagawa::Result<()> {
     /// #[derive(Deserialize, Serialize)]
     /// struct Ip {
     ///     ip: String
@@ -275,9 +275,9 @@ impl Response {
     /// # Examples
     ///
     /// ```no_run
-    /// # use tide::Response;
+    /// # use kanagawa::Response;
     /// # #[async_std::main]
-    /// # async fn main() -> tide::Result<()> {
+    /// # async fn main() -> kanagawa::Result<()> {
     /// let data = "hello world".to_string();
     /// let mut res = Response::new(200);
     /// res.body_string(data);
@@ -296,9 +296,9 @@ impl Response {
     /// # Examples
     ///
     /// ```no_run
-    /// # use tide::Response;
+    /// # use kanagawa::Response;
     /// # #[async_std::main]
-    /// # async fn main() -> tide::Result<()> {
+    /// # async fn main() -> kanagawa::Result<()> {
     /// let data = b"hello world".to_owned();
     /// let mut res = Response::new(200);
     /// res.body_bytes(data);
@@ -325,9 +325,9 @@ impl Response {
     /// # Examples
     ///
     /// ```no_run
-    /// # use tide::Response;
+    /// # use kanagawa::Response;
     /// # #[async_std::main]
-    /// # async fn main() -> tide::Result<()> {
+    /// # async fn main() -> kanagawa::Result<()> {
     /// let mut res = Response::new(200);
     /// res.body_file("./archive.tgz").await?;
     /// # Ok(()) }
@@ -383,10 +383,10 @@ impl Response {
     /// # use async_std::task::block_on;
     /// # fn main() -> Result<(), std::io::Error> { block_on(async {
     /// #
-    /// use tide::Response;
+    /// use kanagawa::Response;
     ///
     /// let error = std::io::Error::new(ErrorKind::Other, "oh no!");
-    /// let error = tide::http::Error::from(error);
+    /// let error = kanagawa::http::Error::from(error);
     ///
     /// let mut res = Response::new(400);
     /// res.set_error(error);
@@ -427,7 +427,7 @@ impl Response {
         self.res.ext_mut().insert(val);
     }
 
-    /// Create a `tide::Response` from a type that can be converted into an
+    /// Create a `kanagawa::Response` from a type that can be converted into an
     /// `http_types::Response`.
     pub fn from_res<T>(value: T) -> Self
     where

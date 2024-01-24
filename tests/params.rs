@@ -1,14 +1,14 @@
 use http_types::{self, Url};
-use tide::{self, Method, Request, Response, Result};
+use kanagawa::{self, Method, Request, Response, Result};
 
 #[async_std::test]
-async fn test_missing_param() -> tide::Result<()> {
+async fn test_missing_param() -> kanagawa::Result<()> {
     async fn greet(req: Request<()>) -> Result<Response> {
         assert_eq!(req.param("name")?, "Param \"name\" not found");
         Ok(Response::new(200))
     }
 
-    let mut server = tide::new();
+    let mut server = kanagawa::new();
     server.at("/").get(greet);
 
     let req = http_types::Request::new(Method::Get, Url::parse("http://example.com/")?);
@@ -19,12 +19,12 @@ async fn test_missing_param() -> tide::Result<()> {
 
 #[async_std::test]
 async fn hello_world_parametrized() -> Result<()> {
-    async fn greet(req: tide::Request<()>) -> Result<impl Into<Response>> {
+    async fn greet(req: kanagawa::Request<()>) -> Result<impl Into<Response>> {
         let body = format!("{} says hello", req.param("name").unwrap_or("nori"));
         Ok(Response::builder(200).body(body))
     }
 
-    let mut server = tide::new();
+    let mut server = kanagawa::new();
     server.at("/").get(greet);
     server.at("/:name").get(greet);
 

@@ -6,7 +6,7 @@ mod unix_tests {
     use http_types::{url::Url, Request};
     use std::time::Duration;
     use tempfile::tempdir;
-    use tide::Method;
+    use kanagawa::Method;
 
     #[test]
     fn hello_unix_world() -> Result<(), http_types::Error> {
@@ -16,8 +16,8 @@ mod unix_tests {
             let sock_path_for_client = sock_path.clone();
 
             let server = task::spawn(async move {
-                let mut app = tide::new();
-                app.at("/").get(|req: tide::Request<()>| async move {
+                let mut app = kanagawa::new();
+                app.at("/").get(|req: kanagawa::Request<()>| async move {
                     Ok(req.local_addr().unwrap().to_string())
                 });
                 app.listen(sock_path).await?;

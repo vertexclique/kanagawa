@@ -1,4 +1,4 @@
-//! Support for logging in tide; see [`LogMiddleware`].
+//! Support for logging in kanagawa; see [`LogMiddleware`].
 
 mod middleware;
 

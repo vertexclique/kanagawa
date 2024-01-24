@@ -13,7 +13,7 @@ use std::convert::TryInto;
 ///
 /// # Example
 /// ```rust
-/// # use tide::{StatusCode, Response, http::mime};
+/// # use kanagawa::{StatusCode, Response, http::mime};
 /// # async_std::task::block_on(async move {
 /// let mut response = Response::builder(203)
 ///     .body("body")
@@ -45,7 +45,7 @@ impl ResponseBuilder {
 
     /// Sets a header on the response.
     /// ```
-    /// # use tide::Response;
+    /// # use kanagawa::Response;
     /// let response = Response::builder(200).header("header-name", "header-value").build();
     /// assert_eq!(response["header-name"], "header-value");
     /// ```
@@ -59,7 +59,7 @@ impl ResponseBuilder {
     /// # Examples
     ///
     /// ```
-    /// # use tide::{http::mime, Response};
+    /// # use kanagawa::{http::mime, Response};
     /// let response = Response::builder(200).content_type(mime::HTML).build();
     /// assert_eq!(response["content-type"], "text/html;charset=utf-8");
     /// ```
@@ -74,7 +74,7 @@ impl ResponseBuilder {
     ///
     /// ```
     /// # async_std::task::block_on(async move {
-    /// # use tide::{Response, convert::json};
+    /// # use kanagawa::{Response, convert::json};
     /// let mut response = Response::builder(200).body(json!({ "any": "Into<Body>"})).build();
     /// assert_eq!(response.take_body().into_string().await.unwrap(), "{\"any\":\"Into<Body>\"}");
     /// # });
@@ -98,9 +98,9 @@ impl ResponseBuilder {
     ///
     /// ```no_run
     /// # use serde::{Deserialize, Serialize};
-    /// # use tide::Response;
+    /// # use kanagawa::Response;
     /// # #[async_std::main]
-    /// # async fn main() -> tide::Result<()> {
+    /// # async fn main() -> kanagawa::Result<()> {
     /// #[derive(Deserialize, Serialize)]
     /// struct Ip {
     ///     ip: String
@@ -124,9 +124,9 @@ impl ResponseBuilder {
     /// # Examples
     ///
     /// ```no_run
-    /// # use tide::Response;
+    /// # use kanagawa::Response;
     /// # #[async_std::main]
-    /// # async fn main() -> tide::Result<()> {
+    /// # async fn main() -> kanagawa::Result<()> {
     /// let data = "hello world".to_string();
     /// let res = Response::builder(200).body_string(data).build();
     /// assert_eq!(res.status(), 200);
@@ -145,9 +145,9 @@ impl ResponseBuilder {
     /// # Examples
     ///
     /// ```no_run
-    /// # use tide::Response;
+    /// # use kanagawa::Response;
     /// # #[async_std::main]
-    /// # async fn main() -> tide::Result<()> {
+    /// # async fn main() -> kanagawa::Result<()> {
     /// let data = b"hello world".to_owned();
     /// let res = Response::builder(200).body_bytes(data).build();
     /// assert_eq!(res.status(), 200);
@@ -174,9 +174,9 @@ impl ResponseBuilder {
     /// # Examples
     ///
     /// ```no_run
-    /// # use tide::Response;
+    /// # use kanagawa::Response;
     /// # #[async_std::main]
-    /// # async fn main() -> tide::Result<()> {
+    /// # async fn main() -> kanagawa::Result<()> {
     /// let res = Response::builder(200).body_file("./archive.tgz").await?.build();
     /// assert_eq!(res.status(), 200);
     /// # Ok(()) }

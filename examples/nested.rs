@@ -1,12 +1,12 @@
-use tide::{block_on, Result};
+use kanagawa::{block_on, Result};
 
 
 async fn server() -> Result<()> {
-    let mut app = tide::new();
-    app.with(tide::log::LogMiddleware::new());
+    let mut app = kanagawa::new();
+    app.with(kanagawa::log::LogMiddleware::new());
     app.at("/").get(|_| async { Ok("Root") });
     app.at("/api").nest({
-        let mut api = tide::new();
+        let mut api = kanagawa::new();
         api.at("/hello").get(|_| async { Ok("Hello, world") });
         api.at("/goodbye").get(|_| async { Ok("Goodbye, world") });
         api

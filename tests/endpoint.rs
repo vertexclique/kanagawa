@@ -1,13 +1,13 @@
-use tide::http::{Method, Request, Url};
-use tide::Response;
+use kanagawa::http::{Method, Request, Url};
+use kanagawa::Response;
 
 #[async_std::test]
 async fn should_accept_boxed_endpoints() {
-    fn endpoint() -> Box<dyn tide::Endpoint<()>> {
+    fn endpoint() -> Box<dyn kanagawa::Endpoint<()>> {
         Box::new(|_| async { Ok("hello world") })
     }
 
-    let mut app = tide::Server::new();
+    let mut app = kanagawa::Server::new();
     app.at("/").get(endpoint());
 
     let mut response: Response = app

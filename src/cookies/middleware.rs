@@ -12,9 +12,9 @@ use std::sync::{Arc, RwLock};
 /// # Examples
 ///
 /// ```
-/// # use tide::{Request, Response, StatusCode};
-/// # use tide::http::cookies::Cookie;
-/// let mut app = tide::Server::new();
+/// # use kanagawa::{Request, Response, StatusCode};
+/// # use kanagawa::http::cookies::Cookie;
+/// let mut app = kanagawa::Server::new();
 /// app.at("/get").get(|req: Request<()>| async move {
 ///     Ok(req.cookie("testCookie").unwrap().value().to_string())
 /// });

@@ -1,14 +1,15 @@
 [package]
-name = "tide"
-version = "0.17.0-beta.1"
-description = "A minimal and pragmatic Rust web application framework built for rapid development"
+name = "kanagawa"
+version = "0.1.0"
+description = "Web framework based on Tide with Proactive IO"
 authors = [
+    "Theo M. Bulut <vertexclique@gmail.com>",
     "Aaron Turon <aturon@mozilla.com>",
     "Yoshua Wuyts <yoshuawuyts@gmail.com>",
     "Wonwoo Choi <chwo9843@gmail.com>",
 ]
-documentation = "https://docs.rs/tide"
-keywords = ["tide", "http", "web", "framework", "async"]
+documentation = "https://docs.rs/kanagawa"
+keywords = ["kanagawa", "http", "web", "framework", "async"]
 categories = [
   "network-programming",
   "asynchronous",
@@ -17,7 +18,7 @@ categories = [
 edition = "2018"
 license = "MIT OR Apache-2.0"
 readme = "README.md"
-repository = "https://github.com/http-rs/tide"
+repository = "https://github.com/http-rs/kanagawa"
 
 [package.metadata.docs.rs]
 features = ["docs"]

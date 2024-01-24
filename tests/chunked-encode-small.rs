@@ -4,7 +4,7 @@ use async_std::prelude::*;
 use async_std::task;
 use std::time::Duration;
 
-use tide::Body;
+use kanagawa::Body;
 
 const TEXT: &str = concat![
     "Eveniet delectus voluptatem in placeat modi. Qui nulla sunt aut non voluptas temporibus accusamus rem. Qui soluta nisi qui accusantium excepturi voluptatem. Ab rerum maiores neque ut expedita rem.",
@@ -18,7 +18,7 @@ const TEXT: &str = concat![
 async fn chunked_large() -> Result<(), http_types::Error> {
     let port = test_utils::find_port().await;
     let server = task::spawn(async move {
-        let mut app = tide::new();
+        let mut app = kanagawa::new();
         app.at("/")
             .get(|_| async { Ok(Body::from_reader(Cursor::new(TEXT), None)) });
         app.listen(("localhost", port)).await?;

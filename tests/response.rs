@@ -1,7 +1,7 @@
 mod test_utils;
 use test_utils::ServerTestingExt;
-use tide::http::{headers, mime};
-use tide::{Response, StatusCode};
+use kanagawa::http::{headers, mime};
+use kanagawa::{Response, StatusCode};
 
 #[async_std::test]
 async fn test_status() {
@@ -15,7 +15,7 @@ async fn test_status() {
 #[async_std::test]
 async fn byte_vec_content_type() {
     use async_std::io::Cursor;
-    use tide::Body;
+    use kanagawa::Body;
 
     let mut resp = Response::new(StatusCode::Ok);
     resp.set_body(Body::from_reader(Cursor::new("foo"), None));
@@ -36,11 +36,11 @@ async fn string_content_type() {
 }
 
 #[async_std::test]
-async fn json_content_type() -> tide::Result<()> {
+async fn json_content_type() -> kanagawa::Result<()> {
     use std::collections::BTreeMap;
-    use tide::Body;
+    use kanagawa::Body;
 
-    let mut app = tide::new();
+    let mut app = kanagawa::new();
     app.at("/json_content_type").get(|_| async {
         let mut map = BTreeMap::new();
         map.insert(Some("a"), 2);
@@ -76,7 +76,7 @@ async fn json_content_type() -> tide::Result<()> {
 fn from_response() {
     let msg = "This is an error";
 
-    let error = tide::Error::from_str(StatusCode::NotFound, msg);
+    let error = kanagawa::Error::from_str(StatusCode::NotFound, msg);
     let mut res: Response = error.into();
 
     assert!(res.error().is_some());

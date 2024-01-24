@@ -12,7 +12,7 @@ use crate::{Request, Result};
 ///
 /// ```no_run
 /// use http_types::headers::HeaderValue;
-/// use tide::security::{CorsMiddleware, Origin};
+/// use kanagawa::security::{CorsMiddleware, Origin};
 ///
 /// let cors = CorsMiddleware::new()
 ///     .allow_methods("GET, POST, OPTIONS".parse::<HeaderValue>().unwrap())

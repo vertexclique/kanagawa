@@ -9,8 +9,8 @@ use crate::{Middleware, Next, Request};
 /// # Examples
 ///
 /// ```
-/// let mut app = tide::Server::new();
-/// app.with(tide::log::LogMiddleware::new());
+/// let mut app = kanagawa::Server::new();
+/// app.with(kanagawa::log::LogMiddleware::new());
 /// ```
 #[derive(Debug, Default, Clone)]
 pub struct LogMiddleware {

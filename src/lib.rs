@@ -1,4 +1,4 @@
-//! Tide is a minimal and pragmatic Rust web application framework built for
+//! Kanagawa is a minimal and pragmatic Rust web application framework built for
 //! rapid development. It comes with a robust set of features that make
 //! building async web applications and APIs easier and more fun.
 //!
@@ -10,7 +10,7 @@
 //!
 //! ```toml
 //! # Example, use the version numbers you need
-//! tide = "0.17.0"
+//! kanagawa = "0.17.0"
 //! async-std = { version = "1.6.0", features = ["attributes"] }
 //! serde = { version = "1.0", features = ["derive"] }
 //!```
@@ -21,8 +21,8 @@
 //! confirmation message.
 //!
 //! ```no_run
-//! use tide::Request;
-//! use tide::prelude::*;
+//! use kanagawa::Request;
+//! use kanagawa::prelude::*;
 //!
 //! #[derive(Debug, Deserialize)]
 //! struct Animal {
@@ -31,14 +31,14 @@
 //! }
 //!
 //! #[async_std::main]
-//! async fn main() -> tide::Result<()> {
-//!     let mut app = tide::new();
+//! async fn main() -> kanagawa::Result<()> {
+//!     let mut app = kanagawa::new();
 //!     app.at("/orders/shoes").post(order_shoes);
 //!     app.listen("127.0.0.1:8080").await?;
 //!     Ok(())
 //! }
 //!
-//! async fn order_shoes(mut req: Request<()>) -> tide::Result {
+//! async fn order_shoes(mut req: Request<()>) -> kanagawa::Result {
 //!     let Animal { name, legs } = req.body_json().await?;
 //!     Ok(format!("Hello, {}! I've put in an order for {} shoes", name, legs).into())
 //! }
@@ -51,7 +51,7 @@
 //! $ curl localhost:8080/orders/shoes -d '{ "name": "Mary Millipede", "legs": 750 }'
 //! Hello, Mary Millipede! I've put in an order for 750 shoes
 //! ```
-//! See more examples in the [examples](https://github.com/http-rs/tide/tree/main/examples) directory.
+//! See more examples in the [examples](https://github.com/http-rs/kanagawa/tree/main/examples) directory.
 
 #![cfg_attr(feature = "docs", feature(doc_cfg))]
 #![forbid(unsafe_code)]
@@ -102,7 +102,7 @@ pub use http_types::{self as http, Body, Error, Method, Status, StatusCode};
 pub use nuclei::*;
 pub use crate::errors::*;
 
-/// Create a new Tide server.
+/// Create a new Kanagawa server.
 ///
 /// # Examples
 ///
@@ -110,7 +110,7 @@ pub use crate::errors::*;
 /// # use nuclei::block_on;
 /// # fn main() -> Result<(), std::io::Error> { block_on(async {
 /// #
-/// let mut app = tide::new();
+/// let mut app = kanagawa::new();
 /// app.at("/").get(|_| async { Ok("Hello, world!") });
 /// app.listen("127.0.0.1:8080").await?;
 /// #
@@ -121,7 +121,7 @@ pub fn new() -> server::Server<()> {
     Server::new()
 }
 
-/// Create a new Tide server with shared application scoped state.
+/// Create a new Kanagawa server with shared application scoped state.
 ///
 /// Application scoped state is useful for storing items
 ///
@@ -131,7 +131,7 @@ pub fn new() -> server::Server<()> {
 /// # use async_std::task::block_on;
 /// # fn main() -> Result<(), std::io::Error> { block_on(async {
 /// #
-/// use tide::Request;
+/// use kanagawa::Request;
 ///
 /// /// The shared application state.
 /// #[derive(Clone)]
@@ -145,7 +145,7 @@ pub fn new() -> server::Server<()> {
 /// };
 ///
 /// // Initialize the application with state.
-/// let mut app = tide::with_state(state);
+/// let mut app = kanagawa::with_state(state);
 /// app.at("/").get(|req: Request<State>| async move {
 ///     Ok(format!("Hello, {}!", &req.state().name))
 /// });
@@ -160,5 +160,5 @@ where
     Server::with_state(state)
 }
 
-/// A specialized Result type for Tide.
+/// A specialized Result type for Kanagawa.
 pub type Result<T = Response> = std::result::Result<T, Error>;

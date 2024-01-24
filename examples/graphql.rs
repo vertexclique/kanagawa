@@ -2,7 +2,7 @@ use std::sync::{Arc, RwLock};
 
 use juniper::{http::graphiql, http::GraphQLRequest, RootNode};
 use lazy_static::lazy_static;
-use tide::{http::mime, *};
+use kanagawa::{http::mime, *};
 
 #[derive(Clone)]
 struct User {
@@ -74,7 +74,7 @@ lazy_static! {
     static ref SCHEMA: Schema = Schema::new(QueryRoot {}, MutationRoot {});
 }
 
-async fn handle_graphql(mut request: Request<State>) -> tide::Result {
+async fn handle_graphql(mut request: Request<State>) -> kanagawa::Result {
     let query: GraphQLRequest = request.body_json().await?;
     let response = query.execute(&SCHEMA, request.state());
     let status = if response.is_ok() {
@@ -88,14 +88,14 @@ async fn handle_graphql(mut request: Request<State>) -> tide::Result {
         .build())
 }
 
-async fn handle_graphiql(_: Request<State>) -> tide::Result<impl Into<Response>> {
+async fn handle_graphiql(_: Request<State>) -> kanagawa::Result<impl Into<Response>> {
     Ok(Response::builder(200)
         .body(graphiql::graphiql_source("/graphql"))
         .content_type(mime::HTML))
 }
 
 async fn server() -> Result<()> {
-    let mut app = tide::with_state(State {
+    let mut app = kanagawa::with_state(State {
         users: Arc::new(RwLock::new(Vec::new())),
     });
     app.at("/").get(Redirect::permanent("/graphiql"));

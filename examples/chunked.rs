@@ -1,8 +1,8 @@
-use tide::*;
+use kanagawa::*;
 
 async fn server() -> Result<()> {
-    let mut app = tide::new();
-    app.with(tide::log::LogMiddleware::new());
+    let mut app = kanagawa::new();
+    app.with(kanagawa::log::LogMiddleware::new());
     app.at("/").get(|_| async {
         // File sends are chunked by default.
         Ok(Body::from_file(file!()).await?)

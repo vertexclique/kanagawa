@@ -54,9 +54,9 @@ impl<State> Request<State> {
     /// # use async_std::task::block_on;
     /// # fn main() -> Result<(), std::io::Error> { block_on(async {
     /// #
-    /// use tide::Request;
+    /// use kanagawa::Request;
     ///
-    /// let mut app = tide::new();
+    /// let mut app = kanagawa::new();
     /// app.at("/").get(|req: Request<()>| async move {
     ///     assert_eq!(req.method(), http_types::Method::Get);
     ///     Ok("")
@@ -78,11 +78,11 @@ impl<State> Request<State> {
     /// # use async_std::task::block_on;
     /// # fn main() -> Result<(), std::io::Error> { block_on(async {
     /// #
-    /// use tide::Request;
+    /// use kanagawa::Request;
     ///
-    /// let mut app = tide::new();
+    /// let mut app = kanagawa::new();
     /// app.at("/").get(|req: Request<()>| async move {
-    ///     assert_eq!(req.url(), &"/".parse::<tide::http::Url>().unwrap());
+    ///     assert_eq!(req.url(), &"/".parse::<kanagawa::http::Url>().unwrap());
     ///     Ok("")
     /// });
     /// app.listen("127.0.0.1:8080").await?;
@@ -102,9 +102,9 @@ impl<State> Request<State> {
     /// # use async_std::task::block_on;
     /// # fn main() -> Result<(), std::io::Error> { block_on(async {
     /// #
-    /// use tide::Request;
+    /// use kanagawa::Request;
     ///
-    /// let mut app = tide::new();
+    /// let mut app = kanagawa::new();
     /// app.at("/").get(|req: Request<()>| async move {
     ///     assert_eq!(req.version(), Some(http_types::Version::Http1_1));
     ///     Ok("")
@@ -173,9 +173,9 @@ impl<State> Request<State> {
     /// # use async_std::task::block_on;
     /// # fn main() -> Result<(), std::io::Error> { block_on(async {
     /// #
-    /// use tide::Request;
+    /// use kanagawa::Request;
     ///
-    /// let mut app = tide::new();
+    /// let mut app = kanagawa::new();
     /// app.at("/").get(|req: Request<()>| async move {
     ///     assert_eq!(req.header("X-Forwarded-For").unwrap(), "127.0.0.1");
     ///     Ok("")
@@ -283,14 +283,14 @@ impl<State> Request<State> {
     /// # use async_std::task::block_on;
     /// # fn main() -> Result<(), std::io::Error> { block_on(async {
     /// #
-    /// use tide::{Request, Result};
+    /// use kanagawa::{Request, Result};
     ///
     /// async fn greet(req: Request<()>) -> Result<String> {
     ///     let name = req.param("name").unwrap_or("world");
     ///     Ok(format!("Hello, {}!", name))
     /// }
     ///
-    /// let mut app = tide::new();
+    /// let mut app = kanagawa::new();
     /// app.at("/hello").get(greet);
     /// app.at("/hello/:name").get(greet);
     /// app.listen("127.0.0.1:8080").await?;
@@ -315,14 +315,14 @@ impl<State> Request<State> {
     /// # use async_std::task::block_on;
     /// # fn main() -> Result<(), std::io::Error> { block_on(async {
     /// #
-    /// use tide::{Request, Result};
+    /// use kanagawa::{Request, Result};
     ///
     /// async fn greet(req: Request<()>) -> Result<String> {
     ///     let name = req.wildcard().unwrap_or("world");
     ///     Ok(format!("Hello, {}!", name))
     /// }
     ///
-    /// let mut app = tide::new();
+    /// let mut app = kanagawa::new();
     /// app.at("/hello/*").get(greet);
     /// app.listen("127.0.0.1:8080").await?;
     /// #
@@ -342,8 +342,8 @@ impl<State> Request<State> {
     ///
     /// ```
     /// use std::collections::HashMap;
-    /// use tide::http::{self, convert::Deserialize};
-    /// use tide::Request;
+    /// use kanagawa::http::{self, convert::Deserialize};
+    /// use kanagawa::Request;
     ///
     /// // An owned structure:
     ///
@@ -405,9 +405,9 @@ impl<State> Request<State> {
     /// # use async_std::task::block_on;
     /// # fn main() -> Result<(), std::io::Error> { block_on(async {
     /// #
-    /// use tide::Request;
+    /// use kanagawa::Request;
     ///
-    /// let mut app = tide::new();
+    /// let mut app = kanagawa::new();
     /// app.at("/").get(|mut req: Request<()>| async move {
     ///     let _body: Vec<u8> = req.body_bytes().await.unwrap();
     ///     Ok("")
@@ -439,9 +439,9 @@ impl<State> Request<State> {
     /// # use async_std::task::block_on;
     /// # fn main() -> Result<(), std::io::Error> { block_on(async {
     /// #
-    /// use tide::Request;
+    /// use kanagawa::Request;
     ///
-    /// let mut app = tide::new();
+    /// let mut app = kanagawa::new();
     /// app.at("/").get(|mut req: Request<()>| async move {
     ///     let _body: String = req.body_string().await.unwrap();
     ///     Ok("")
@@ -473,8 +473,8 @@ impl<State> Request<State> {
     ///
     /// ```rust
     /// # fn main() -> Result<(), std::io::Error> { async_std::task::block_on(async {
-    /// use tide::prelude::*;
-    /// let mut app = tide::new();
+    /// use kanagawa::prelude::*;
+    /// let mut app = kanagawa::new();
     ///
     /// #[derive(Deserialize)]
     /// struct Animal {
@@ -482,7 +482,7 @@ impl<State> Request<State> {
     ///   legs: u8
     /// }
     ///
-    /// app.at("/").post(|mut req: tide::Request<()>| async move {
+    /// app.at("/").post(|mut req: kanagawa::Request<()>| async move {
     ///     let animal: Animal = req.body_form().await?;
     ///     Ok(format!(
     ///         "hello, {}! i've put in an order for {} shoes",
@@ -518,12 +518,12 @@ impl<State> Request<State> {
     ///
     /// # Panics
     ///
-    /// This method will panic if a tide::sessions:SessionMiddleware has not
+    /// This method will panic if a kanagawa::sessions:SessionMiddleware has not
     /// been run.
     #[cfg(feature = "sessions")]
     pub fn session(&self) -> &crate::sessions::Session {
         self.ext::<crate::sessions::Session>().expect(
-            "request session not initialized, did you enable tide::sessions::SessionMiddleware?",
+            "request session not initialized, did you enable kanagawa::sessions::SessionMiddleware?",
         )
     }
 
@@ -531,12 +531,12 @@ impl<State> Request<State> {
     ///
     /// # Panics
     ///
-    /// This method will panic if a tide::sessions:SessionMiddleware has not
+    /// This method will panic if a kanagawa::sessions:SessionMiddleware has not
     /// been run.
     #[cfg(feature = "sessions")]
     pub fn session_mut(&mut self) -> &mut crate::sessions::Session {
         self.ext_mut().expect(
-            "request session not initialized, did you enable tide::sessions::SessionMiddleware?",
+            "request session not initialized, did you enable kanagawa::sessions::SessionMiddleware?",
         )
     }
 

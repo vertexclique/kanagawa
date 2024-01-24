@@ -2,7 +2,7 @@ use criterion::{black_box, criterion_group, criterion_main, Criterion};
 use http_types::{Method, Request, Response, Url};
 
 fn criterion_benchmark(c: &mut Criterion) {
-    let mut app = tide::new();
+    let mut app = kanagawa::new();
     app.at("/hello").get(|_| async { Ok("hello world") });
 
     let route = Url::parse("https://example.com/hello").unwrap();

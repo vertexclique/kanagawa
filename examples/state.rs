@@ -1,6 +1,6 @@
 use std::sync::atomic::{AtomicU32, Ordering};
 use std::sync::Arc;
-use tide::*;
+use kanagawa::*;
 
 #[derive(Clone)]
 struct State {
@@ -16,14 +16,14 @@ impl State {
 }
 
 async fn server() -> Result<()> {
-    let mut app = tide::with_state(State::new());
-    app.with(tide::log::LogMiddleware::new());
-    app.at("/").get(|req: tide::Request<State>| async move {
+    let mut app = kanagawa::with_state(State::new());
+    app.with(kanagawa::log::LogMiddleware::new());
+    app.at("/").get(|req: kanagawa::Request<State>| async move {
         let state = req.state();
         let value = state.value.load(Ordering::Relaxed);
         Ok(format!("{}\n", value))
     });
-    app.at("/inc").get(|req: tide::Request<State>| async move {
+    app.at("/inc").get(|req: kanagawa::Request<State>| async move {
         let state = req.state();
         let value = state.value.fetch_add(1, Ordering::Relaxed) + 1;
         Ok(format!("{}\n", value))

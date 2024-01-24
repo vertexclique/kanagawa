@@ -1,4 +1,4 @@
-use tide::*;
+use kanagawa::*;
 
 fn fib(n: usize) -> usize {
     if n == 0 || n == 1 {
@@ -8,7 +8,7 @@ fn fib(n: usize) -> usize {
     }
 }
 
-async fn fibsum(req: Request<()>) -> tide::Result<String> {
+async fn fibsum(req: Request<()>) -> kanagawa::Result<String> {
     use std::time::Instant;
     let n: usize = req.param("n")?.parse().unwrap_or(0);
     // Start a stopwatch
@@ -29,13 +29,13 @@ async fn fibsum(req: Request<()>) -> tide::Result<String> {
 // The fib of 42 is 267914296.
 // It was computed in 2 secs.
 async fn server() -> Result<()> {
-    let mut app = tide::new();
+    let mut app = kanagawa::new();
     app.at("/fib/:n").get(fibsum);
     app.listen("0.0.0.0:8080").await?;
     Ok(())
 }
 
 
-fn main() -> tide::Result<()> {
+fn main() -> kanagawa::Result<()> {
     block_on(server())
 }

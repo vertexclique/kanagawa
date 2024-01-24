@@ -14,9 +14,9 @@
 //! ```no_run
 //! # fn main() -> Result<(), std::io::Error> { async_std::task::block_on(async {
 //! #
-//! use tide::sse;
+//! use kanagawa::sse;
 //!
-//! let mut app = tide::new();
+//! let mut app = kanagawa::new();
 //! app.at("/sse").get(sse::endpoint(|_req, sender| async move {
 //!     sender.send("fruit", "banana", None).await?;
 //!     sender.send("fruit", "apple", None).await?;

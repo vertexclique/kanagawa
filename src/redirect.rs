@@ -6,9 +6,9 @@
 //! # use async_std::task::block_on;
 //! # fn main() -> Result<(), std::io::Error> { block_on(async {
 //! #
-//! use tide::Redirect;
+//! use kanagawa::Redirect;
 //!
-//! let mut app = tide::new();
+//! let mut app = kanagawa::new();
 //! app.at("/").get(|_| async { Ok("meow") });
 //! app.at("/nori").get(Redirect::temporary("/"));
 //! app.listen("127.0.0.1:8080").await?;
@@ -25,10 +25,10 @@ use crate::{Endpoint, Request, Response};
 /// # Example
 ///
 /// ```
-/// # use tide::{Response, Redirect, Request, StatusCode};
+/// # use kanagawa::{Response, Redirect, Request, StatusCode};
 /// # fn next_product() -> Option<String> { None }
 /// # #[allow(dead_code)]
-/// async fn route_handler(request: Request<()>) -> tide::Result {
+/// async fn route_handler(request: Request<()>) -> kanagawa::Result {
 ///     if let Some(product_url) = next_product() {
 ///         Ok(Redirect::new(product_url).into())
 ///     } else {

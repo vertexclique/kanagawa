@@ -1,12 +1,12 @@
 use async_std::prelude::*;
-use tide::http::cookies::Cookie;
-use tide::http::headers::{COOKIE, SET_COOKIE};
+use kanagawa::http::cookies::Cookie;
+use kanagawa::http::headers::{COOKIE, SET_COOKIE};
 
-use tide::{Method, Request, Response, Server, StatusCode};
+use kanagawa::{Method, Request, Response, Server, StatusCode};
 
 static COOKIE_NAME: &str = "testCookie";
 
-async fn retrieve_cookie(req: Request<()>) -> tide::Result<String> {
+async fn retrieve_cookie(req: Request<()>) -> kanagawa::Result<String> {
     Ok(format!(
         "{} and also {}",
         req.cookie(COOKIE_NAME).unwrap().value(),
@@ -14,19 +14,19 @@ async fn retrieve_cookie(req: Request<()>) -> tide::Result<String> {
     ))
 }
 
-async fn insert_cookie(_req: Request<()>) -> tide::Result {
+async fn insert_cookie(_req: Request<()>) -> kanagawa::Result {
     let mut res = Response::new(StatusCode::Ok);
     res.insert_cookie(Cookie::new(COOKIE_NAME, "NewCookieValue"));
     Ok(res)
 }
 
-async fn remove_cookie(_req: Request<()>) -> tide::Result {
+async fn remove_cookie(_req: Request<()>) -> kanagawa::Result {
     let mut res = Response::new(StatusCode::Ok);
     res.remove_cookie(Cookie::named(COOKIE_NAME));
     Ok(res)
 }
 
-async fn set_multiple_cookie(_req: Request<()>) -> tide::Result {
+async fn set_multiple_cookie(_req: Request<()>) -> kanagawa::Result {
     let mut res = Response::new(StatusCode::Ok);
     res.insert_cookie(Cookie::new("C1", "V1"));
     res.insert_cookie(Cookie::new("C2", "V2"));
@@ -34,7 +34,7 @@ async fn set_multiple_cookie(_req: Request<()>) -> tide::Result {
 }
 
 fn app() -> crate::Server<()> {
-    let mut app = tide::new();
+    let mut app = kanagawa::new();
 
     app.at("/get").get(retrieve_cookie);
     app.at("/set").get(insert_cookie);
@@ -58,7 +58,7 @@ async fn make_request(endpoint: &str) -> http_types::Response {
         "testCookie=RequestCookieValue; secondTestCookie=Other%3BCookie%20Value",
     );
 
-    let res: tide::http::Response = app.respond(req).await.unwrap();
+    let res: kanagawa::http::Response = app.respond(req).await.unwrap();
     res
 }
 

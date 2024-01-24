@@ -1,15 +1,15 @@
 use serde::{Deserialize, Serialize};
-use tide::prelude::*; // Pulls in the json! macro.
-use tide::*;
+use kanagawa::prelude::*; // Pulls in the json! macro.
+use kanagawa::*;
 
 #[derive(Deserialize, Serialize)]
 struct Cat {
     name: String,
 }
 
-async fn server() -> tide::Result<()> {
-    let mut app = tide::new();
-    app.with(tide::log::LogMiddleware::new());
+async fn server() -> kanagawa::Result<()> {
+    let mut app = kanagawa::new();
+    app.with(kanagawa::log::LogMiddleware::new());
 
     app.at("/submit").post(|mut req: Request<()>| async move {
         let cat: Cat = req.body_json().await?;
@@ -36,6 +36,6 @@ async fn server() -> tide::Result<()> {
     Ok(())
 }
 
-fn main() -> tide::Result<()> {
+fn main() -> kanagawa::Result<()> {
     block_on(server())
 }

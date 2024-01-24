@@ -1,8 +1,8 @@
 mod test_utils;
 use test_utils::ServerTestingExt;
-use tide::{Error, Request, StatusCode};
+use kanagawa::{Error, Request, StatusCode};
 
-async fn add_one(req: Request<()>) -> Result<String, tide::Error> {
+async fn add_one(req: Request<()>) -> Result<String, kanagawa::Error> {
     let num: i64 = req
         .param("num")?
         .parse()
@@ -10,7 +10,7 @@ async fn add_one(req: Request<()>) -> Result<String, tide::Error> {
     Ok((num + 1).to_string())
 }
 
-async fn add_two(req: Request<()>) -> Result<String, tide::Error> {
+async fn add_two(req: Request<()>) -> Result<String, kanagawa::Error> {
     let one: i64 = req
         .param("one")?
         .parse()
@@ -22,14 +22,14 @@ async fn add_two(req: Request<()>) -> Result<String, tide::Error> {
     Ok((one + two).to_string())
 }
 
-async fn echo_param(req: Request<()>) -> tide::Result<tide::Response> {
+async fn echo_param(req: Request<()>) -> kanagawa::Result<kanagawa::Response> {
     match req.param("param") {
         Ok(path) => Ok(path.into()),
         Err(_) => Ok(StatusCode::NotFound.into()),
     }
 }
 
-async fn echo_wildcard(req: Request<()>) -> tide::Result<tide::Response> {
+async fn echo_wildcard(req: Request<()>) -> kanagawa::Result<kanagawa::Response> {
     match req.wildcard() {
         Some(path) => Ok(path.into()),
         None => Ok(StatusCode::NotFound.into()),
@@ -37,8 +37,8 @@ async fn echo_wildcard(req: Request<()>) -> tide::Result<tide::Response> {
 }
 
 #[async_std::test]
-async fn param() -> tide::Result<()> {
-    let mut app = tide::Server::new();
+async fn param() -> kanagawa::Result<()> {
+    let mut app = kanagawa::Server::new();
     app.at("/add_one/:num").get(add_one);
     assert_eq!(app.get("/add_one/3").recv_string().await?, "4");
     assert_eq!(app.get("/add_one/-7").recv_string().await?, "-6");
@@ -46,8 +46,8 @@ async fn param() -> tide::Result<()> {
 }
 
 #[async_std::test]
-async fn invalid_segment_error() -> tide::Result<()> {
-    let mut app = tide::new();
+async fn invalid_segment_error() -> kanagawa::Result<()> {
+    let mut app = kanagawa::new();
     app.at("/add_one/:num").get(add_one);
     assert_eq!(
         app.get("/add_one/a").await?.status(),
@@ -57,16 +57,16 @@ async fn invalid_segment_error() -> tide::Result<()> {
 }
 
 #[async_std::test]
-async fn not_found_error() -> tide::Result<()> {
-    let mut app = tide::new();
+async fn not_found_error() -> kanagawa::Result<()> {
+    let mut app = kanagawa::new();
     app.at("/add_one/:num").get(add_one);
     assert_eq!(app.get("/add_one/").await?.status(), StatusCode::NotFound);
     Ok(())
 }
 
 #[async_std::test]
-async fn wildcard() -> tide::Result<()> {
-    let mut app = tide::new();
+async fn wildcard() -> kanagawa::Result<()> {
+    let mut app = kanagawa::new();
     app.at("/echo/*").get(echo_wildcard);
     assert_eq!(app.get("/echo/some_path").recv_string().await?, "some_path");
     assert_eq!(
@@ -79,8 +79,8 @@ async fn wildcard() -> tide::Result<()> {
 }
 
 #[async_std::test]
-async fn multi_param() -> tide::Result<()> {
-    let mut app = tide::new();
+async fn multi_param() -> kanagawa::Result<()> {
+    let mut app = kanagawa::new();
     app.at("/add_two/:one/:two/").get(add_two);
     assert_eq!(app.get("/add_two/1/2/").recv_string().await?, "3");
     assert_eq!(app.get("/add_two/-1/2/").recv_string().await?, "1");
@@ -89,8 +89,8 @@ async fn multi_param() -> tide::Result<()> {
 }
 
 #[async_std::test]
-async fn wildcard_last_segment() -> tide::Result<()> {
-    let mut app = tide::new();
+async fn wildcard_last_segment() -> kanagawa::Result<()> {
+    let mut app = kanagawa::new();
     app.at("/echo/:param/*").get(echo_param);
     assert_eq!(app.get("/echo/one/two").recv_string().await?, "one");
     assert_eq!(
@@ -101,8 +101,8 @@ async fn wildcard_last_segment() -> tide::Result<()> {
 }
 
 #[async_std::test]
-async fn ambiguous_router_wildcard_vs_star() -> tide::Result<()> {
-    let mut app = tide::new();
+async fn ambiguous_router_wildcard_vs_star() -> kanagawa::Result<()> {
+    let mut app = kanagawa::new();
     app.at("/:one/:two").get(|_| async { Ok("one/two") });
     app.at("/posts/*").get(|_| async { Ok("posts/*") });
     assert_eq!(app.get("/posts/10").recv_string().await?, "posts/*");
