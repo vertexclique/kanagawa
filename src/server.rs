@@ -3,15 +3,15 @@
 use std::io;
 use std::net::{TcpListener, ToSocketAddrs};
 use std::sync::Arc;
-use futures_util::StreamExt;
+use futures_util::{future, StreamExt};
 use kv_log_macro::{error, info, trace};
-use nuclei::Handle;
+use nuclei::{drive, Handle};
 
 #[cfg(feature = "cookies")]
 use crate::cookies;
 use crate::middleware::{Middleware, Next};
 use crate::router::{Router, Selection};
-use crate::{Endpoint, Request, Route};
+use crate::{Endpoint, Request, Route, spawn_blocking};
 use crate::errors::*;
 
 /// An HTTP server.
@@ -107,6 +107,8 @@ where
     /// # Ok(()) }) }
     /// ```
     pub fn with_state(state: State) -> Self {
+        spawn_blocking(|| drive(future::pending::<()>())).detach();
+
         Self {
             router: Arc::new(Router::new()),
             middleware: Arc::new(vec![

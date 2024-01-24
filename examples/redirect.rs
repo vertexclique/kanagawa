@@ -1,7 +1,6 @@
-use tide::{Redirect, Response, StatusCode};
+use tide::*;
 
-#[async_std::main]
-async fn main() -> Result<(), std::io::Error> {
+async fn server() -> Result<()> {
     let mut app = tide::new();
     app.with(tide::log::LogMiddleware::new());
     app.at("/").get(|_| async { Ok("Root") });
@@ -25,4 +24,8 @@ async fn main() -> Result<(), std::io::Error> {
 
 fn signed_in() -> bool {
     false
+}
+
+fn main() -> Result<()> {
+    block_on(server())
 }

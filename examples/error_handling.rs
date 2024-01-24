@@ -1,15 +1,14 @@
 use std::io::ErrorKind;
 
 use tide::utils::After;
-use tide::{Body, Request, Response, Result, StatusCode};
+use tide::*;
 
-#[async_std::main]
-async fn main() -> Result<()> {
+async fn server() -> Result<()> {
     let mut app = tide::new();
     app.with(tide::log::LogMiddleware::new());
 
     app.with(After(|mut res: Response| async {
-        if let Some(err) = res.downcast_error::<async_std::io::Error>() {
+        if let Some(err) = res.downcast_error::<std::io::Error>() {
             if let ErrorKind::NotFound = err.kind() {
                 let msg = format!("Error: {:?}", err);
                 res.set_status(StatusCode::NotFound);
@@ -27,4 +26,8 @@ async fn main() -> Result<()> {
     app.listen("127.0.0.1:8080").await?;
 
     Ok(())
+}
+
+fn main() -> tide::Result<()> {
+    block_on(server())
 }

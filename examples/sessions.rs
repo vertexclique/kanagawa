@@ -1,5 +1,6 @@
-#[async_std::main]
-async fn main() -> Result<(), std::io::Error> {
+use tide::*;
+
+async fn server() -> Result<()> {
     let mut app = tide::new();
     app.with(tide::log::LogMiddleware::new());
 
@@ -36,4 +37,8 @@ async fn main() -> Result<(), std::io::Error> {
     app.listen("127.0.0.1:8080").await?;
 
     Ok(())
+}
+
+fn main() -> tide::Result<()> {
+    block_on(server())
 }

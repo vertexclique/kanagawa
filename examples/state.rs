@@ -1,5 +1,6 @@
 use std::sync::atomic::{AtomicU32, Ordering};
 use std::sync::Arc;
+use tide::*;
 
 #[derive(Clone)]
 struct State {
@@ -14,8 +15,7 @@ impl State {
     }
 }
 
-#[async_std::main]
-async fn main() -> tide::Result<()> {
+async fn server() -> Result<()> {
     let mut app = tide::with_state(State::new());
     app.with(tide::log::LogMiddleware::new());
     app.at("/").get(|req: tide::Request<State>| async move {
@@ -30,4 +30,8 @@ async fn main() -> tide::Result<()> {
     });
     app.listen("127.0.0.1:8080").await?;
     Ok(())
+}
+
+fn main() -> Result<()> {
+    block_on(server())
 }

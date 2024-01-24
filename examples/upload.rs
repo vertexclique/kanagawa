@@ -1,12 +1,14 @@
-use std::io::Error as IoError;
+use std::io::{Error as IoError, Write};
 use std::path::Path;
 use std::sync::Arc;
 
-use async_std::{fs::OpenOptions, io};
+use std::{fs::OpenOptions, io};
+use std::fs::File;
 use kv_log_macro::info;
 use tempfile::TempDir;
 use tide::prelude::*;
-use tide::{Body, Request, Response, StatusCode};
+use tide::*;
+use futures::AsyncWriteExt;
 
 #[derive(Clone)]
 struct TempDirState {
@@ -14,7 +16,7 @@ struct TempDirState {
 }
 
 impl TempDirState {
-    fn try_new() -> Result<Self, IoError> {
+    fn try_new() -> Result<Self> {
         Ok(Self {
             tempdir: Arc::new(tempfile::tempdir()?),
         })
@@ -25,8 +27,7 @@ impl TempDirState {
     }
 }
 
-#[async_std::main]
-async fn main() -> Result<(), IoError> {
+async fn server() -> Result<()> {
     let mut app = tide::with_state(TempDirState::try_new()?);
     app.with(tide::log::LogMiddleware::new());
 
@@ -36,17 +37,21 @@ async fn main() -> Result<(), IoError> {
     // $ curl localhost:8080/README.md # this reads the file from the same temp directory
 
     app.at(":file")
-        .put(|req: Request<TempDirState>| async move {
+        .put(|mut req: Request<TempDirState>| async move {
             let path = req.param("file")?;
             let fs_path = req.state().path().join(path);
 
             let file = OpenOptions::new()
                 .create(true)
                 .write(true)
-                .open(&fs_path)
-                .await?;
+                .open(&fs_path).unwrap();
 
-            let bytes_written = io::copy(req, file).await?;
+            let mut file = Handle::<File>::new(file).unwrap();
+
+            // io::copy is not needed, since uring's copy is better than std impl.
+            let body = req.body_bytes().await?;
+            file.write_all(body.as_slice()).await?;
+            let bytes_written = body.len();
 
             info!("file written", {
                 bytes: bytes_written,
@@ -68,4 +73,8 @@ async fn main() -> Result<(), IoError> {
 
     app.listen("127.0.0.1:8080").await?;
     Ok(())
+}
+
+fn main() -> Result<()> {
+    block_on(server())
 }

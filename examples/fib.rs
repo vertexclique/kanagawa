@@ -1,4 +1,4 @@
-use tide::Request;
+use tide::*;
 
 fn fib(n: usize) -> usize {
     if n == 0 || n == 1 {
@@ -28,10 +28,14 @@ async fn fibsum(req: Request<()>) -> tide::Result<String> {
 // $ curl "http://localhost:8080/fib/42"
 // The fib of 42 is 267914296.
 // It was computed in 2 secs.
-#[async_std::main]
-async fn main() -> Result<(), std::io::Error> {
+async fn server() -> Result<()> {
     let mut app = tide::new();
     app.at("/fib/:n").get(fibsum);
     app.listen("0.0.0.0:8080").await?;
     Ok(())
+}
+
+
+fn main() -> tide::Result<()> {
+    block_on(server())
 }

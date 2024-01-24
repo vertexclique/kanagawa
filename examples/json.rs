@@ -1,14 +1,13 @@
 use serde::{Deserialize, Serialize};
 use tide::prelude::*; // Pulls in the json! macro.
-use tide::{Body, Request};
+use tide::*;
 
 #[derive(Deserialize, Serialize)]
 struct Cat {
     name: String,
 }
 
-#[async_std::main]
-async fn main() -> tide::Result<()> {
+async fn server() -> tide::Result<()> {
     let mut app = tide::new();
     app.with(tide::log::LogMiddleware::new());
 
@@ -35,4 +34,8 @@ async fn main() -> tide::Result<()> {
 
     app.listen("127.0.0.1:8080").await?;
     Ok(())
+}
+
+fn main() -> tide::Result<()> {
+    block_on(server())
 }

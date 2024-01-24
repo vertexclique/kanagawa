@@ -1,7 +1,6 @@
-use tide::sse;
+use tide::{*, sse};
 
-#[async_std::main]
-async fn main() -> Result<(), std::io::Error> {
+async fn server() -> Result<()> {
     let mut app = tide::new();
     app.with(tide::log::LogMiddleware::new());
     app.at("/sse").get(sse::endpoint(|_req, sender| async move {
@@ -11,4 +10,8 @@ async fn main() -> Result<(), std::io::Error> {
     }));
     app.listen("localhost:8080").await?;
     Ok(())
+}
+
+fn main() -> Result<()> {
+    block_on(server())
 }

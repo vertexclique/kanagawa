@@ -1,5 +1,5 @@
 use tide::http::Cookie;
-use tide::{Request, Response, StatusCode};
+use tide::*;
 
 /// Tide will use the the `Cookies`'s `Extract` implementation to build this parameter.
 ///
@@ -19,8 +19,7 @@ async fn remove_cookie(_req: Request<()>) -> tide::Result {
     Ok(res)
 }
 
-#[async_std::main]
-async fn main() -> Result<(), std::io::Error> {
+async fn server() -> Result<()> {
     let mut app = tide::new();
     app.with(tide::log::LogMiddleware::new());
 
@@ -30,4 +29,8 @@ async fn main() -> Result<(), std::io::Error> {
     app.listen("127.0.0.1:8080").await?;
 
     Ok(())
+}
+
+fn main() -> tide::Result<()> {
+    block_on(server())
 }

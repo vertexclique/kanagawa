@@ -118,8 +118,6 @@ pub use crate::errors::*;
 /// ```
 #[must_use]
 pub fn new() -> server::Server<()> {
-    spawn_blocking(|| drive(future::pending::<()>())).detach();
-
     Server::new()
 }
 

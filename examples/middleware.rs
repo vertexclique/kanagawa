@@ -6,7 +6,7 @@ use std::sync::Arc;
 use kv_log_macro::trace;
 use tide::http::mime;
 use tide::utils::{After, Before};
-use tide::{Middleware, Next, Request, Response, Result, StatusCode};
+use tide::*;
 
 #[derive(Debug)]
 struct User {
@@ -90,8 +90,8 @@ const INTERNAL_SERVER_ERROR_HTML_PAGE: &str = "<html><body>
   </p>
 </body></html>";
 
-#[async_std::main]
-async fn main() -> Result<()> {
+
+async fn server() -> Result<()> {
     let mut app = tide::with_state(UserDatabase);
 
     app.with(After(|response: Response| async move {
@@ -131,4 +131,8 @@ async fn main() -> Result<()> {
 
     app.listen("127.0.0.1:8080").await?;
     Ok(())
+}
+
+fn main() -> Result<()> {
+    block_on(server())
 }
