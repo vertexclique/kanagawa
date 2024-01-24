@@ -5,7 +5,7 @@ use std::net::{TcpListener, ToSocketAddrs};
 use std::sync::Arc;
 use futures_util::{future, StreamExt};
 use kv_log_macro::{error, info, trace};
-use nuclei::{drive, Handle};
+use nuclei::{drive, Handle, Proactor};
 
 #[cfg(feature = "cookies")]
 use crate::cookies;
@@ -191,7 +191,7 @@ where
         self
     }
 
-    /// Asynchronously serve the app with the supplied listener.
+    /// Asynchronously serve the app with listener.
     ///
     /// This is a shorthand for calling `Server::bind`, logging the `ListenInfo`
     /// instances from `Listener::info`, and then calling `Listener::accept`.
@@ -213,25 +213,55 @@ where
         let host = format!("http://{}", listener.get_ref().local_addr()?);
         println!("Listening on {}", host);
 
-        let mut streams = listener.accept_multi().await?;
+        cfg_if::cfg_if! {
+            if #[cfg(target_os = "linux")] {
+                let mut streams = listener.accept_multi().await?;
 
-        while let Some(stream) = streams.next().await {
-            let stream = async_dup::Arc::new(stream);
-            let server = self.clone();
-            let local_addr = stream.local_addr().ok();
-            let peer_addr = stream.peer_addr().ok();
+                let mut local_addr = None;
+                let mut peer_addr = None;
 
-            nuclei::spawn(async move {
-                let fut = async_h1::accept(stream, |mut req| async {
-                    req.set_local_addr(local_addr);
-                    req.set_peer_addr(peer_addr);
-                    server.respond(req).await
-                });
+                while let Some(stream) = streams.next().await {
+                    let stream = async_dup::Arc::new(stream);
+                    let server = self.clone();
+                    if local_addr.is_none() && peer_addr.is_none() {
+                        local_addr = stream.local_addr().ok();
+                        peer_addr = stream.peer_addr().ok();
+                    }
 
-                if let Err(error) = fut.await {
-                    error!("async-h1 error", { error: error.to_string() });
+                    nuclei::spawn(async move {
+                        let fut = async_h1::accept(stream, |mut req| async {
+                            req.set_local_addr(local_addr);
+                            req.set_peer_addr(peer_addr);
+                            server.respond(req).await
+                        });
+
+                        if let Err(error) = fut.await {
+                            error!("async-h1 error", { error: error.to_string() });
+                        }
+                    }).detach();
                 }
-            }).detach();
+            } else if #[cfg(target_os = "macos")] {
+                loop {
+                    // Accept the next connection.
+                    let (stream, _) = listener.accept().await?;
+
+                    // Spawn a background task serving this connection.
+                    let stream = async_dup::Arc::new(stream);
+                    nuclei::spawn(async move {
+                        let fut = async_h1::accept(stream, |mut req| async {
+                            req.set_local_addr(local_addr);
+                            req.set_peer_addr(peer_addr);
+                            server.respond(req).await
+                        });
+
+
+                        if let Err(error) = fut.await {
+                            error!("async-h1 error", { error: error.to_string() });
+                        }
+                    })
+                    .detach();
+                }
+            }
         }
 
         Ok(())

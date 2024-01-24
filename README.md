@@ -107,9 +107,7 @@ See more examples in the [examples](https://github.com/http-rs/kanagawa/tree/mai
 ## Community Resources
 <sub>To add a link to this list, [edit the markdown
 file](https://github.com/vertexclique/kanagawa/edit/main/README.md) and
-submit a pull request (github login required)</sub><br/><sup>Listing here
-does not constitute an endorsement or recommendation from the kanagawa
-team. Use at your own risk.</sup>
+submit a pull request (github login required)</sub><br/><sup>Please list here.</sup>
 
 ## Contributing
 Want to join us? Check out our [The "Contributing" section of the
