@@ -32,7 +32,7 @@
       API Docs
     </a>
     <span> | </span>
-    <a href="https://github.com/http-rs/kanagawa/blob/main/.github/CONTRIBUTING.md">
+    <a href="https://github.com/vertexclique/kanagawa/blob/main/.github/CONTRIBUTING.md">
       Contributing
     </a>
     <span> | </span>
@@ -43,7 +43,7 @@
 </div>
 
 Kanagawa is a fork of [Tide web framework](https://github.com/http-rs/tide/). It focuses on performance
-rather than convenience.
+rather than the convenience.
 
 ## Getting started
 

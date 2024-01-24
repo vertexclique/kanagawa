@@ -18,7 +18,7 @@ categories = [
 edition = "2018"
 license = "MIT OR Apache-2.0"
 readme = "README.md"
-repository = "https://github.com/http-rs/kanagawa"
+repository = "https://github.com/vertexclique/kanagawa"
 
 [package.metadata.docs.rs]
 features = ["docs"]

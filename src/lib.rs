@@ -51,7 +51,7 @@
 //! $ curl localhost:8080/orders/shoes -d '{ "name": "Mary Millipede", "legs": 750 }'
 //! Hello, Mary Millipede! I've put in an order for 750 shoes
 //! ```
-//! See more examples in the [examples](https://github.com/http-rs/kanagawa/tree/main/examples) directory.
+//! See more examples in the [examples](https://github.com/vertexclique/kanagawa/tree/main/examples) directory.
 
 #![cfg_attr(feature = "docs", feature(doc_cfg))]
 #![forbid(unsafe_code)]
