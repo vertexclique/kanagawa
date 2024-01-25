@@ -241,12 +241,22 @@ where
                     }).detach();
                 }
             } else if #[cfg(target_os = "macos")] {
+                let mut local_addr = None;
+                let mut peer_addr = None;
+
                 loop {
                     // Accept the next connection.
                     let (stream, _) = listener.accept().await?;
 
+                    // Get server instance
+                    let server = self.clone();
+
                     // Spawn a background task serving this connection.
                     let stream = async_dup::Arc::new(stream);
+                    if local_addr.is_none() && peer_addr.is_none() {
+                        local_addr = stream.local_addr().ok();
+                        peer_addr = stream.peer_addr().ok();
+                    }
                     nuclei::spawn(async move {
                         let fut = async_h1::accept(stream, |mut req| async {
                             req.set_local_addr(local_addr);
