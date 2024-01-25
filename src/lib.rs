@@ -11,8 +11,6 @@
 //! ```toml
 //! # Example, use the version numbers you need
 //! kanagawa = "0.17.0"
-//! async-std = { version = "1.6.0", features = ["attributes"] }
-//! serde = { version = "1.0", features = ["derive"] }
 //!```
 //!
 //! # Examples
@@ -60,8 +58,8 @@
 #![allow(clippy::len_without_is_empty)]
 #![doc(test(attr(deny(warnings))))]
 #![doc(test(attr(allow(unused_extern_crates, unused_variables))))]
-#![doc(html_favicon_url = "https://yoshuawuyts.com/assets/http-rs/favicon.ico")]
-#![doc(html_logo_url = "https://yoshuawuyts.com/assets/http-rs/logo-rounded.png")]
+#![doc(html_favicon_url = "https://raw.githubusercontent.com/vertexclique/kanagawa/main/art/favicon.ico")]
+#![doc(html_logo_url = "https://raw.githubusercontent.com/vertexclique/kanagawa/main/art/kanagawa-square-logo.png")]
 
 #[cfg(feature = "cookies")]
 mod cookies;
