@@ -7,7 +7,8 @@ struct Cat {
     name: String,
 }
 
-async fn server() -> kanagawa::Result<()> {
+#[nuclei::main]
+async fn main() -> kanagawa::Result<()> {
     let mut app = kanagawa::new();
     app.with(kanagawa::log::LogMiddleware::new());
 
@@ -34,8 +35,4 @@ async fn server() -> kanagawa::Result<()> {
 
     app.listen("127.0.0.1:8080").await?;
     Ok(())
-}
-
-fn main() -> kanagawa::Result<()> {
-    block_on(server())
 }

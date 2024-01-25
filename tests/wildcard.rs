@@ -36,7 +36,7 @@ async fn echo_wildcard(req: Request<()>) -> kanagawa::Result<kanagawa::Response>
     }
 }
 
-#[async_std::test]
+#[nuclei::test]
 async fn param() -> kanagawa::Result<()> {
     let mut app = kanagawa::Server::new();
     app.at("/add_one/:num").get(add_one);
@@ -45,7 +45,7 @@ async fn param() -> kanagawa::Result<()> {
     Ok(())
 }
 
-#[async_std::test]
+#[nuclei::test]
 async fn invalid_segment_error() -> kanagawa::Result<()> {
     let mut app = kanagawa::new();
     app.at("/add_one/:num").get(add_one);
@@ -56,7 +56,7 @@ async fn invalid_segment_error() -> kanagawa::Result<()> {
     Ok(())
 }
 
-#[async_std::test]
+#[nuclei::test]
 async fn not_found_error() -> kanagawa::Result<()> {
     let mut app = kanagawa::new();
     app.at("/add_one/:num").get(add_one);
@@ -64,7 +64,7 @@ async fn not_found_error() -> kanagawa::Result<()> {
     Ok(())
 }
 
-#[async_std::test]
+#[nuclei::test]
 async fn wildcard() -> kanagawa::Result<()> {
     let mut app = kanagawa::new();
     app.at("/echo/*").get(echo_wildcard);
@@ -78,7 +78,7 @@ async fn wildcard() -> kanagawa::Result<()> {
     Ok(())
 }
 
-#[async_std::test]
+#[nuclei::test]
 async fn multi_param() -> kanagawa::Result<()> {
     let mut app = kanagawa::new();
     app.at("/add_two/:one/:two/").get(add_two);
@@ -88,7 +88,7 @@ async fn multi_param() -> kanagawa::Result<()> {
     Ok(())
 }
 
-#[async_std::test]
+#[nuclei::test]
 async fn wildcard_last_segment() -> kanagawa::Result<()> {
     let mut app = kanagawa::new();
     app.at("/echo/:param/*").get(echo_param);
@@ -100,7 +100,7 @@ async fn wildcard_last_segment() -> kanagawa::Result<()> {
     Ok(())
 }
 
-#[async_std::test]
+#[nuclei::test]
 async fn ambiguous_router_wildcard_vs_star() -> kanagawa::Result<()> {
     let mut app = kanagawa::new();
     app.at("/:one/:two").get(|_| async { Ok("one/two") });

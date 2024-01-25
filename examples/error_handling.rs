@@ -3,7 +3,8 @@ use std::io::ErrorKind;
 use kanagawa::utils::After;
 use kanagawa::*;
 
-async fn server() -> Result<()> {
+#[nuclei::main]
+async fn main() -> Result<()> {
     let mut app = kanagawa::new();
     app.with(kanagawa::log::LogMiddleware::new());
 
@@ -26,8 +27,4 @@ async fn server() -> Result<()> {
     app.listen("127.0.0.1:8080").await?;
 
     Ok(())
-}
-
-fn main() -> kanagawa::Result<()> {
-    block_on(server())
 }

@@ -295,7 +295,7 @@ mod test {
         req
     }
 
-    #[async_std::test]
+    #[nuclei::test]
     async fn preflight_request() {
         let mut app = app();
         app.with(
@@ -320,7 +320,7 @@ mod test {
 
         assert_eq!(res[headers::ACCESS_CONTROL_ALLOW_CREDENTIALS], "true");
     }
-    #[async_std::test]
+    #[nuclei::test]
     async fn default_cors_middleware() {
         let mut app = app();
         app.with(CorsMiddleware::new());
@@ -330,7 +330,7 @@ mod test {
         assert_eq!(res[headers::ACCESS_CONTROL_ALLOW_ORIGIN], "*");
     }
 
-    #[async_std::test]
+    #[nuclei::test]
     async fn custom_cors_middleware() {
         let mut app = app();
         app.with(
@@ -346,7 +346,7 @@ mod test {
         assert_eq!(res[headers::ACCESS_CONTROL_ALLOW_ORIGIN], ALLOW_ORIGIN);
     }
 
-    #[async_std::test]
+    #[nuclei::test]
     async fn regex_cors_middleware() {
         let regex = Regex::new(r"e[xzs]a.*le.com*").unwrap();
         let mut app = app();
@@ -363,7 +363,7 @@ mod test {
         assert_eq!(res[headers::ACCESS_CONTROL_ALLOW_ORIGIN], ALLOW_ORIGIN);
     }
 
-    #[async_std::test]
+    #[nuclei::test]
     async fn credentials_true() {
         let mut app = app();
         app.with(CorsMiddleware::new().allow_credentials(true));
@@ -373,7 +373,7 @@ mod test {
         assert_eq!(res[headers::ACCESS_CONTROL_ALLOW_CREDENTIALS], "true");
     }
 
-    #[async_std::test]
+    #[nuclei::test]
     async fn set_allow_origin_list() {
         let mut app = app();
         let origins = vec![ALLOW_ORIGIN, "foo.com", "bar.com"];
@@ -390,7 +390,7 @@ mod test {
         }
     }
 
-    #[async_std::test]
+    #[nuclei::test]
     async fn not_set_origin_header() {
         let mut app = app();
         app.with(CorsMiddleware::new().allow_origin(ALLOW_ORIGIN));
@@ -401,7 +401,7 @@ mod test {
         assert_eq!(res.status(), 200);
     }
 
-    #[async_std::test]
+    #[nuclei::test]
     async fn unauthorized_origin() {
         let mut app = app();
         app.with(CorsMiddleware::new().allow_origin(ALLOW_ORIGIN));
@@ -413,7 +413,7 @@ mod test {
         assert_eq!(res.status(), 401);
     }
 
-    #[async_std::test]
+    #[nuclei::test]
     #[cfg(feature = "cookies")]
     async fn retain_cookies() {
         let mut app = crate::Server::new();
@@ -431,7 +431,7 @@ mod test {
         assert_eq!(res[http_types::headers::SET_COOKIE][0], "foo=bar");
     }
 
-    #[async_std::test]
+    #[nuclei::test]
     async fn set_cors_headers_to_error_responses() {
         let mut app = crate::Server::new();
         app.at(ENDPOINT).get(|_| async {

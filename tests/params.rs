@@ -1,7 +1,7 @@
 use http_types::{self, Url};
 use kanagawa::{self, Method, Request, Response, Result};
 
-#[async_std::test]
+#[nuclei::test]
 async fn test_missing_param() -> kanagawa::Result<()> {
     async fn greet(req: Request<()>) -> Result<Response> {
         assert_eq!(req.param("name")?, "Param \"name\" not found");
@@ -17,7 +17,7 @@ async fn test_missing_param() -> kanagawa::Result<()> {
     Ok(())
 }
 
-#[async_std::test]
+#[nuclei::test]
 async fn hello_world_parametrized() -> Result<()> {
     async fn greet(req: kanagawa::Request<()>) -> Result<impl Into<Response>> {
         let body = format!("{} says hello", req.param("name").unwrap_or("nori"));

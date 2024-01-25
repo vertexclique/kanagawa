@@ -29,7 +29,7 @@ fn request(path: &str) -> http_types::Request {
     )
 }
 
-#[async_std::test]
+#[nuclei::test]
 async fn ok() {
     let tempdir = tempfile::tempdir().unwrap();
     let app = app(&tempdir).unwrap();
@@ -39,7 +39,7 @@ async fn ok() {
     assert_eq!(res.body_string().await.unwrap().as_str(), "Foobar");
 }
 
-#[async_std::test]
+#[nuclei::test]
 async fn not_found() {
     let tempdir = tempfile::tempdir().unwrap();
     let app = app(&tempdir).unwrap();
@@ -48,7 +48,7 @@ async fn not_found() {
     assert_eq!(res.status(), 404);
 }
 
-#[async_std::test]
+#[nuclei::test]
 async fn static_endpoint_mixin() {
     let tempdir = tempfile::tempdir().unwrap();
     let app = app(&tempdir).unwrap();

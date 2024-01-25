@@ -4,7 +4,7 @@ use std::path::Path;
 
 use std::path::PathBuf;
 use async_trait::async_trait;
-use kv_log_macro::warn;
+use tracing::warn;
 
 pub(crate) struct ServeFile {
     path: PathBuf,
@@ -59,7 +59,7 @@ mod test {
         crate::Request::new((), request, vec![])
     }
 
-    #[async_std::test]
+    #[nuclei::test]
     async fn should_serve_file() {
         let tempdir = tempfile::tempdir().unwrap();
         let serve_file = serve_file(&tempdir).unwrap();
@@ -70,7 +70,7 @@ mod test {
         assert_eq!(res.body_string().await.unwrap(), "Foobar");
     }
 
-    #[async_std::test]
+    #[nuclei::test]
     async fn should_serve_404_when_file_missing() {
         let serve_file = ServeFile {
             path: PathBuf::from("gone/file"),

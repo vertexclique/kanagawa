@@ -14,7 +14,7 @@ use std::convert::TryInto;
 /// # Example
 /// ```rust
 /// # use kanagawa::{StatusCode, Response, http::mime};
-/// # async_std::task::block_on(async move {
+/// # nuclei::block_on(async move {
 /// let mut response = Response::builder(203)
 ///     .body("body")
 ///     .content_type(mime::HTML)
@@ -73,7 +73,7 @@ impl ResponseBuilder {
     /// # Examples
     ///
     /// ```
-    /// # async_std::task::block_on(async move {
+    /// # nuclei::block_on(async move {
     /// # use kanagawa::{Response, convert::json};
     /// let mut response = Response::builder(200).body(json!({ "any": "Into<Body>"})).build();
     /// assert_eq!(response.take_body().into_string().await.unwrap(), "{\"any\":\"Into<Body>\"}");
@@ -99,7 +99,7 @@ impl ResponseBuilder {
     /// ```no_run
     /// # use serde::{Deserialize, Serialize};
     /// # use kanagawa::Response;
-    /// # #[async_std::main]
+    /// # #[nuclei::main]
     /// # async fn main() -> kanagawa::Result<()> {
     /// #[derive(Deserialize, Serialize)]
     /// struct Ip {
@@ -125,7 +125,7 @@ impl ResponseBuilder {
     ///
     /// ```no_run
     /// # use kanagawa::Response;
-    /// # #[async_std::main]
+    /// # #[nuclei::main]
     /// # async fn main() -> kanagawa::Result<()> {
     /// let data = "hello world".to_string();
     /// let res = Response::builder(200).body_string(data).build();
@@ -146,7 +146,7 @@ impl ResponseBuilder {
     ///
     /// ```no_run
     /// # use kanagawa::Response;
-    /// # #[async_std::main]
+    /// # #[nuclei::main]
     /// # async fn main() -> kanagawa::Result<()> {
     /// let data = b"hello world".to_owned();
     /// let res = Response::builder(200).body_bytes(data).build();
@@ -175,7 +175,7 @@ impl ResponseBuilder {
     ///
     /// ```no_run
     /// # use kanagawa::Response;
-    /// # #[async_std::main]
+    /// # #[nuclei::main]
     /// # async fn main() -> kanagawa::Result<()> {
     /// let res = Response::builder(200).body_file("./archive.tgz").await?.build();
     /// assert_eq!(res.status(), 200);

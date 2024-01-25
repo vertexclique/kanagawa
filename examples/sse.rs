@@ -1,6 +1,7 @@
 use kanagawa::{*, sse};
 
-async fn server() -> Result<()> {
+#[nuclei::main]
+async fn main() -> Result<()> {
     let mut app = kanagawa::new();
     app.with(kanagawa::log::LogMiddleware::new());
     app.at("/sse").get(sse::endpoint(|_req, sender| async move {
@@ -10,8 +11,4 @@ async fn server() -> Result<()> {
     }));
     app.listen("localhost:8080").await?;
     Ok(())
-}
-
-fn main() -> Result<()> {
-    block_on(server())
 }

@@ -94,7 +94,8 @@ async fn handle_graphiql(_: Request<State>) -> kanagawa::Result<impl Into<Respon
         .content_type(mime::HTML))
 }
 
-async fn server() -> Result<()> {
+#[nuclei::main]
+async fn main() -> Result<()> {
     let mut app = kanagawa::with_state(State {
         users: Arc::new(RwLock::new(Vec::new())),
     });
@@ -103,8 +104,4 @@ async fn server() -> Result<()> {
     app.at("/graphiql").get(handle_graphiql);
     app.listen("0.0.0.0:8080").await?;
     Ok(())
-}
-
-fn main() -> Result<()> {
-    block_on(server())
 }

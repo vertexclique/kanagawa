@@ -14,7 +14,7 @@ struct SessionData {
     visits: usize,
 }
 
-#[async_std::test]
+#[nuclei::test]
 async fn test_basic_sessions() -> kanagawa::Result<()> {
     let mut app = kanagawa::new();
     app.with(SessionMiddleware::new(
@@ -56,7 +56,7 @@ async fn test_basic_sessions() -> kanagawa::Result<()> {
     Ok(())
 }
 
-#[async_std::test]
+#[nuclei::test]
 async fn test_customized_sessions() -> kanagawa::Result<()> {
     let mut app = kanagawa::new();
     app.with(
@@ -129,7 +129,7 @@ async fn test_customized_sessions() -> kanagawa::Result<()> {
     Ok(())
 }
 
-#[async_std::test]
+#[nuclei::test]
 async fn test_session_destruction() -> kanagawa::Result<()> {
     let mut app = kanagawa::new();
     app.with(SessionMiddleware::new(

@@ -19,7 +19,8 @@ async fn remove_cookie(_req: Request<()>) -> kanagawa::Result {
     Ok(res)
 }
 
-async fn server() -> Result<()> {
+#[nuclei::main]
+async fn main() -> Result<()> {
     let mut app = kanagawa::new();
     app.with(kanagawa::log::LogMiddleware::new());
 
@@ -29,8 +30,4 @@ async fn server() -> Result<()> {
     app.listen("127.0.0.1:8080").await?;
 
     Ok(())
-}
-
-fn main() -> kanagawa::Result<()> {
-    block_on(server())
 }

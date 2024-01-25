@@ -4,7 +4,7 @@ use std::io;
 use std::net::{TcpListener, ToSocketAddrs};
 use std::sync::Arc;
 use futures_util::{future, StreamExt};
-use kv_log_macro::{error, info, trace};
+use tracing::{error, info, trace};
 use nuclei::{drive, Handle, Proactor};
 
 #[cfg(feature = "cookies")]
@@ -81,7 +81,7 @@ where
     /// # Examples
     ///
     /// ```no_run
-    /// # use async_std::task::block_on;
+    /// # use nuclei::block_on;
     /// # fn main() -> Result<(), std::io::Error> { block_on(async {
     /// #
     /// use kanagawa::Request;
@@ -199,7 +199,7 @@ where
     /// # Examples
     ///
     /// ```no_run
-    /// # use async_std::task::block_on;
+    /// # use nuclei::block_on;
     /// # fn main() -> Result<(), std::io::Error> { block_on(async {
     /// #
     /// let mut app = kanagawa::new();
@@ -236,7 +236,7 @@ where
                         });
 
                         if let Err(error) = fut.await {
-                            error!("async-h1 error", { error: error.to_string() });
+                            error!("async-h1 error {}", error.to_string());
                         }
                     }).detach();
                 }
@@ -256,7 +256,7 @@ where
 
 
                         if let Err(error) = fut.await {
-                            error!("async-h1 error", { error: error.to_string() });
+                            error!("async-h1 error {}", error.to_string());
                         }
                     })
                     .detach();
@@ -281,7 +281,7 @@ where
     /// # Examples
     ///
     /// ```no_run
-    /// # use async_std::task::block_on;
+    /// # use nuclei::block_on;
     /// # fn main() -> Result<(), std::io::Error> { block_on(async {
     /// #
     /// use kanagawa::prelude::*;
@@ -311,7 +311,7 @@ where
     /// # Examples
     ///
     /// ```no_run
-    /// # #[async_std::main]
+    /// # #[nuclei::main]
     /// # async fn main() -> http_types::Result<()> {
     /// #
     /// use kanagawa::http::{Url, Method, Request, Response};

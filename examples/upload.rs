@@ -4,7 +4,7 @@ use std::sync::Arc;
 
 use std::{fs::OpenOptions, io};
 use std::fs::File;
-use kv_log_macro::info;
+use tracing::info;
 use tempfile::TempDir;
 use kanagawa::prelude::*;
 use kanagawa::*;
@@ -27,7 +27,8 @@ impl TempDirState {
     }
 }
 
-async fn server() -> Result<()> {
+#[nuclei::main]
+async fn main() -> Result<()> {
     let mut app = kanagawa::with_state(TempDirState::try_new()?);
     app.with(kanagawa::log::LogMiddleware::new());
 
@@ -53,10 +54,9 @@ async fn server() -> Result<()> {
             file.write_all(body.as_slice()).await?;
             let bytes_written = body.len();
 
-            info!("file written", {
-                bytes: bytes_written,
-                path: fs_path.canonicalize()?.to_str()
-            });
+            info!(bytes = bytes_written,
+                path = fs_path.canonicalize()?.to_str(),
+                "file written");
 
             Ok(json!({ "bytes": bytes_written }))
         })
@@ -73,8 +73,4 @@ async fn server() -> Result<()> {
 
     app.listen("127.0.0.1:8080").await?;
     Ok(())
-}
-
-fn main() -> Result<()> {
-    block_on(server())
 }

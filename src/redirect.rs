@@ -3,7 +3,7 @@
 //! # Examples
 //!
 //! ```no_run
-//! # use async_std::task::block_on;
+//! # use nuclei::block_on;
 //! # fn main() -> Result<(), std::io::Error> { block_on(async {
 //! #
 //! use kanagawa::Redirect;
@@ -117,8 +117,8 @@ mod test {
     use super::*;
     use crate::*;
 
-    #[test]
-    fn smoke() {
+    #[nuclei::test]
+    async fn smoke() {
         let redirect = Redirect::new("https://example.com");
         let res: Response = redirect.clone().into();
         assert_eq!(res.status(), StatusCode::Found);

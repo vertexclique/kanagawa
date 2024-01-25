@@ -30,7 +30,7 @@
 //!     legs: u16,
 //! }
 //!
-//! #[async_std::main]
+//! #[nuclei::main]
 //! async fn main() -> kanagawa::Result<()> {
 //!     let mut app = kanagawa::new();
 //!     app.at("/orders/shoes").post(order_shoes);
@@ -128,7 +128,7 @@ pub fn new() -> server::Server<()> {
 /// # Examples
 ///
 /// ```no_run
-/// # use async_std::task::block_on;
+/// # use nuclei::block_on;
 /// # fn main() -> Result<(), std::io::Error> { block_on(async {
 /// #
 /// use kanagawa::Request;

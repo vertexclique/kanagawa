@@ -28,14 +28,10 @@ async fn fibsum(req: Request<()>) -> kanagawa::Result<String> {
 // $ curl "http://localhost:8080/fib/42"
 // The fib of 42 is 267914296.
 // It was computed in 2 secs.
-async fn server() -> Result<()> {
+#[nuclei::main]
+async fn main() -> Result<()> {
     let mut app = kanagawa::new();
     app.at("/fib/:n").get(fibsum);
     app.listen("0.0.0.0:8080").await?;
     Ok(())
-}
-
-
-fn main() -> kanagawa::Result<()> {
-    block_on(server())
 }

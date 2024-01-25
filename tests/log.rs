@@ -4,7 +4,7 @@ use std::time::Duration;
 mod test_utils;
 use test_utils::ServerTestingExt;
 
-#[async_std::test]
+#[nuclei::test]
 async fn log_tests() -> kanagawa::Result<()> {
     let mut logger = logtest::start();
     test_server_listen(&mut logger).await;

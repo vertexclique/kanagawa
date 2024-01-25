@@ -1,4 +1,4 @@
-use kv_log_macro::{error, info, warn};
+use tracing::{error, info, warn};
 
 use crate::{Middleware, Next, Request};
 
@@ -39,56 +39,53 @@ impl LogMiddleware {
 
         let path = req.url().path().to_owned();
         let method = req.method().to_string();
-        info!("<-- Request received", {
-            method: method,
-            path: path,
-        });
+        info!(method = ?method, path = ?path, "<-- Request received");
         let start = std::time::Instant::now();
         let response = next.run(req).await;
         let status = response.status();
         if status.is_server_error() {
             if let Some(error) = response.error() {
-                error!("Internal error --> Response sent", {
-                    message: format!("{:?}", error),
-                    error_type: error.type_name(),
-                    method: method,
-                    path: path,
-                    status: format!("{} - {}", status as u16, status.canonical_reason()),
-                    duration: format!("{:?}", start.elapsed()),
-                });
+                error!(message = format!("{:?}", error),
+                    error_type = error.type_name(),
+                    method = method,
+                    path = path,
+                    status = format!("{} - {}", status as u16, status.canonical_reason()),
+                    duration = format!("{:?}", start.elapsed()),
+                    "Internal error --> Response sent",
+                );
             } else {
-                error!("Internal error --> Response sent", {
-                    method: method,
-                    path: path,
-                    status: format!("{} - {}", status as u16, status.canonical_reason()),
-                    duration: format!("{:?}", start.elapsed()),
-                });
+                error!(method = method,
+                    path = path,
+                    status = format!("{} - {}", status as u16, status.canonical_reason()),
+                    duration = format!("{:?}", start.elapsed()),
+                    "Internal error --> Response sent"
+                );
             }
         } else if status.is_client_error() {
             if let Some(error) = response.error() {
-                warn!("Client error --> Response sent", {
-                    message: format!("{:?}", error),
-                    error_type: error.type_name(),
-                    method: method,
-                    path: path,
-                    status: format!("{} - {}", status as u16, status.canonical_reason()),
-                    duration: format!("{:?}", start.elapsed()),
-                });
+                warn!(message = format!("{:?}", error),
+                    error_type = error.type_name(),
+                    method = method,
+                    path = path,
+                    status = format!("{} - {}", status as u16, status.canonical_reason()),
+                    duration = format!("{:?}", start.elapsed()),
+                    "Client error --> Response sent"
+                );
             } else {
-                warn!("Client error --> Response sent", {
-                    method: method,
-                    path: path,
-                    status: format!("{} - {}", status as u16, status.canonical_reason()),
-                    duration: format!("{:?}", start.elapsed()),
-                });
+                warn!(method = method,
+                    path = path,
+                    status = format!("{} - {}", status as u16, status.canonical_reason()),
+                    duration = format!("{:?}", start.elapsed()),
+                    "Client error --> Response sent"
+                );
             }
         } else {
-            info!("--> Response sent", {
-                method: method,
-                path: path,
-                status: format!("{} - {}", status as u16, status.canonical_reason()),
-                duration: format!("{:?}", start.elapsed()),
-            });
+            info!(method = method,
+                path = path,
+                status = format!("{} - {}", status as u16, status.canonical_reason()),
+                duration = format!("{:?}", start.elapsed()),
+                "--> Response sent"
+            );
         }
         Ok(response)
     }

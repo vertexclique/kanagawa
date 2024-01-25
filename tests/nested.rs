@@ -1,7 +1,7 @@
 mod test_utils;
 use test_utils::ServerTestingExt;
 
-#[async_std::test]
+#[nuclei::test]
 async fn nested() -> kanagawa::Result<()> {
     let mut inner = kanagawa::new();
     inner.at("/foo").get(|_| async { Ok("foo") });
@@ -16,7 +16,7 @@ async fn nested() -> kanagawa::Result<()> {
     Ok(())
 }
 
-#[async_std::test]
+#[nuclei::test]
 async fn nested_middleware() -> kanagawa::Result<()> {
     let echo_path = |req: kanagawa::Request<()>| async move { Ok(req.url().path().to_string()) };
     let mut app = kanagawa::new();
@@ -47,7 +47,7 @@ async fn nested_middleware() -> kanagawa::Result<()> {
     Ok(())
 }
 
-#[async_std::test]
+#[nuclei::test]
 async fn nested_with_different_state() -> kanagawa::Result<()> {
     let mut outer = kanagawa::new();
     let mut inner = kanagawa::with_state(42);

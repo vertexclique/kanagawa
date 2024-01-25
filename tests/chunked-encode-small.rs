@@ -14,7 +14,7 @@ const TEXT: &str = concat![
     "Eos maxime hic aliquid accusantium. Et voluptas sit accusamus modi natus. Et voluptatem sequi ea et provident voluptatum minus voluptas. Culpa aliquam architecto consequatur animi.",
 ];
 
-#[async_std::test]
+#[nuclei::test]
 async fn chunked_large() -> Result<(), http_types::Error> {
     let port = test_utils::find_port().await;
     let server = task::spawn(async move {

@@ -12,7 +12,7 @@
 //! # Examples
 //!
 //! ```no_run
-//! # fn main() -> Result<(), std::io::Error> { async_std::task::block_on(async {
+//! # fn main() -> Result<(), std::io::Error> { nuclei::block_on(async {
 //! #
 //! use kanagawa::sse;
 //!

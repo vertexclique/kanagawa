@@ -11,7 +11,7 @@ use async_session::{
     hmac::{Hmac, Mac, NewMac},
     sha2::Sha256,
 };
-use kv_log_macro::error;
+use tracing::error;
 
 const BASE64_DIGEST_LEN: usize = 44;
 
@@ -20,7 +20,7 @@ const BASE64_DIGEST_LEN: usize = 44;
 ///
 /// ## Example
 /// ```rust
-/// # async_std::task::block_on(async {
+/// # nuclei::block_on(async {
 /// let mut app = kanagawa::new();
 ///
 /// app.with(kanagawa::sessions::SessionMiddleware::new(

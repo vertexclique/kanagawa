@@ -48,7 +48,7 @@ impl Response {
     /// # Example:
     /// ```rust
     /// # use kanagawa::{StatusCode, Response, http::mime};
-    /// # async_std::task::block_on(async move {
+    /// # nuclei::block_on(async move {
     /// let mut response = Response::builder(203)
     ///     .body("<html>hi</html>")
     ///     .header("custom-header", "value")
@@ -214,7 +214,7 @@ impl Response {
     /// ```
     /// # use async_std::io::prelude::*;
     /// # fn main() -> Result<(), Box<dyn std::error::Error + Send + Sync + 'static>> {
-    /// # async_std::task::block_on(async {
+    /// # nuclei::block_on(async {
     /// #
     /// use kanagawa::Response;
     ///
@@ -249,7 +249,7 @@ impl Response {
     /// ```no_run
     /// # use serde::{Deserialize, Serialize};
     /// # use kanagawa::Response;
-    /// # #[async_std::main]
+    /// # #[nuclei::main]
     /// # async fn main() -> kanagawa::Result<()> {
     /// #[derive(Deserialize, Serialize)]
     /// struct Ip {
@@ -276,7 +276,7 @@ impl Response {
     ///
     /// ```no_run
     /// # use kanagawa::Response;
-    /// # #[async_std::main]
+    /// # #[nuclei::main]
     /// # async fn main() -> kanagawa::Result<()> {
     /// let data = "hello world".to_string();
     /// let mut res = Response::new(200);
@@ -297,7 +297,7 @@ impl Response {
     ///
     /// ```no_run
     /// # use kanagawa::Response;
-    /// # #[async_std::main]
+    /// # #[nuclei::main]
     /// # async fn main() -> kanagawa::Result<()> {
     /// let data = b"hello world".to_owned();
     /// let mut res = Response::new(200);
@@ -326,7 +326,7 @@ impl Response {
     ///
     /// ```no_run
     /// # use kanagawa::Response;
-    /// # #[async_std::main]
+    /// # #[nuclei::main]
     /// # async fn main() -> kanagawa::Result<()> {
     /// let mut res = Response::new(200);
     /// res.body_file("./archive.tgz").await?;
@@ -380,7 +380,7 @@ impl Response {
     ///
     /// ```
     /// # use std::io::ErrorKind;
-    /// # use async_std::task::block_on;
+    /// # use nuclei::block_on;
     /// # fn main() -> Result<(), std::io::Error> { block_on(async {
     /// #
     /// use kanagawa::Response;

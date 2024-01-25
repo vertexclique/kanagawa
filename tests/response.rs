@@ -3,7 +3,7 @@ use test_utils::ServerTestingExt;
 use kanagawa::http::{headers, mime};
 use kanagawa::{Response, StatusCode};
 
-#[async_std::test]
+#[nuclei::test]
 async fn test_status() {
     let mut resp = Response::new(StatusCode::NotFound);
     resp.set_body("foo");
@@ -12,7 +12,7 @@ async fn test_status() {
     assert_eq!(body.as_bytes(), b"foo");
 }
 
-#[async_std::test]
+#[nuclei::test]
 async fn byte_vec_content_type() {
     use async_std::io::Cursor;
     use kanagawa::Body;
@@ -25,7 +25,7 @@ async fn byte_vec_content_type() {
     assert_eq!(body, b"foo");
 }
 
-#[async_std::test]
+#[nuclei::test]
 async fn string_content_type() {
     let mut resp = Response::new(StatusCode::Ok);
     resp.set_body("foo");
@@ -35,7 +35,7 @@ async fn string_content_type() {
     assert_eq!(body, "foo");
 }
 
-#[async_std::test]
+#[nuclei::test]
 async fn json_content_type() -> kanagawa::Result<()> {
     use std::collections::BTreeMap;
     use kanagawa::Body;

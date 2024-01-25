@@ -15,7 +15,8 @@ impl State {
     }
 }
 
-async fn server() -> Result<()> {
+#[nuclei::main]
+async fn main() -> Result<()> {
     let mut app = kanagawa::with_state(State::new());
     app.with(kanagawa::log::LogMiddleware::new());
     app.at("/").get(|req: kanagawa::Request<State>| async move {
@@ -30,8 +31,4 @@ async fn server() -> Result<()> {
     });
     app.listen("127.0.0.1:8080").await?;
     Ok(())
-}
-
-fn main() -> Result<()> {
-    block_on(server())
 }

@@ -7,7 +7,7 @@ use crate::endpoint::MiddlewareEndpoint;
 use crate::fs::{ServeDir, ServeFile};
 use crate::{router::Router, Endpoint, Middleware};
 
-use kv_log_macro::trace;
+use tracing::trace;
 
 /// A handle to a route.
 ///
@@ -106,7 +106,7 @@ impl<'a, State: Clone + Send + Sync + 'static> Route<'a, State> {
     /// return "Unexpected" to the client
     ///
     /// ```no_run
-    /// #[async_std::main]
+    /// #[nuclei::main]
     /// async fn main() -> Result<(), std::io::Error> {
     ///     let mut app = kanagawa::new();
     ///     app.at("/hello").nest({
@@ -156,7 +156,7 @@ impl<'a, State: Clone + Send + Sync + 'static> Route<'a, State> {
     /// `localhost:8080/images/*`.
     ///
     /// ```no_run
-    /// #[async_std::main]
+    /// #[nuclei::main]
     /// async fn main() -> Result<(), std::io::Error> {
     ///     let mut app = kanagawa::new();
     ///     app.at("/images/*").serve_dir("public/images/")?;

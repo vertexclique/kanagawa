@@ -51,7 +51,7 @@ impl<State> Request<State> {
     /// # Examples
     ///
     /// ```no_run
-    /// # use async_std::task::block_on;
+    /// # use nuclei::block_on;
     /// # fn main() -> Result<(), std::io::Error> { block_on(async {
     /// #
     /// use kanagawa::Request;
@@ -75,7 +75,7 @@ impl<State> Request<State> {
     /// # Examples
     ///
     /// ```no_run
-    /// # use async_std::task::block_on;
+    /// # use nuclei::block_on;
     /// # fn main() -> Result<(), std::io::Error> { block_on(async {
     /// #
     /// use kanagawa::Request;
@@ -99,7 +99,7 @@ impl<State> Request<State> {
     /// # Examples
     ///
     /// ```no_run
-    /// # use async_std::task::block_on;
+    /// # use nuclei::block_on;
     /// # fn main() -> Result<(), std::io::Error> { block_on(async {
     /// #
     /// use kanagawa::Request;
@@ -170,7 +170,7 @@ impl<State> Request<State> {
     /// # Examples
     ///
     /// ```no_run
-    /// # use async_std::task::block_on;
+    /// # use nuclei::block_on;
     /// # fn main() -> Result<(), std::io::Error> { block_on(async {
     /// #
     /// use kanagawa::Request;
@@ -280,7 +280,7 @@ impl<State> Request<State> {
     /// # Examples
     ///
     /// ```no_run
-    /// # use async_std::task::block_on;
+    /// # use nuclei::block_on;
     /// # fn main() -> Result<(), std::io::Error> { block_on(async {
     /// #
     /// use kanagawa::{Request, Result};
@@ -312,7 +312,7 @@ impl<State> Request<State> {
     /// # Examples
     ///
     /// ```no_run
-    /// # use async_std::task::block_on;
+    /// # use nuclei::block_on;
     /// # fn main() -> Result<(), std::io::Error> { block_on(async {
     /// #
     /// use kanagawa::{Request, Result};
@@ -402,7 +402,7 @@ impl<State> Request<State> {
     /// # Examples
     ///
     /// ```no_run
-    /// # use async_std::task::block_on;
+    /// # use nuclei::block_on;
     /// # fn main() -> Result<(), std::io::Error> { block_on(async {
     /// #
     /// use kanagawa::Request;
@@ -436,7 +436,7 @@ impl<State> Request<State> {
     /// # Examples
     ///
     /// ```no_run
-    /// # use async_std::task::block_on;
+    /// # use nuclei::block_on;
     /// # fn main() -> Result<(), std::io::Error> { block_on(async {
     /// #
     /// use kanagawa::Request;
@@ -472,7 +472,7 @@ impl<State> Request<State> {
     /// Parse the request body as a form.
     ///
     /// ```rust
-    /// # fn main() -> Result<(), std::io::Error> { async_std::task::block_on(async {
+    /// # fn main() -> Result<(), std::io::Error> { nuclei::block_on(async {
     /// use kanagawa::prelude::*;
     /// let mut app = kanagawa::new();
     ///

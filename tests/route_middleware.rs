@@ -29,7 +29,7 @@ async fn echo_path<State>(req: kanagawa::Request<State>) -> kanagawa::Result<Str
     Ok(req.url().path().to_string())
 }
 
-#[async_std::test]
+#[nuclei::test]
 async fn route_middleware() -> kanagawa::Result<()> {
     let mut app = kanagawa::new();
     let mut foo_route = app.at("/foo");
@@ -55,7 +55,7 @@ async fn route_middleware() -> kanagawa::Result<()> {
     Ok(())
 }
 
-#[async_std::test]
+#[nuclei::test]
 async fn app_and_route_middleware() -> kanagawa::Result<()> {
     let mut app = kanagawa::new();
     app.with(TestMiddleware::with_header_name("X-Root", "root"));
@@ -78,7 +78,7 @@ async fn app_and_route_middleware() -> kanagawa::Result<()> {
     Ok(())
 }
 
-#[async_std::test]
+#[nuclei::test]
 async fn nested_app_with_route_middleware() -> kanagawa::Result<()> {
     let mut inner = kanagawa::new();
     inner.with(TestMiddleware::with_header_name("X-Inner", "inner"));
@@ -112,7 +112,7 @@ async fn nested_app_with_route_middleware() -> kanagawa::Result<()> {
     Ok(())
 }
 
-#[async_std::test]
+#[nuclei::test]
 async fn subroute_not_nested() -> kanagawa::Result<()> {
     let mut app = kanagawa::new();
     app.at("/parent") // /parent

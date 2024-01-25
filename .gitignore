@@ -6,3 +6,5 @@ npm-debug.log*
 Cargo.lock
 .DS_Store
 .idea
+kanagawa_bench.txt
+tide_bench.txt

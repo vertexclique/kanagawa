@@ -1,7 +1,7 @@
 use kanagawa::http::{Method, Request, Url};
 use kanagawa::Response;
 
-#[async_std::test]
+#[nuclei::test]
 async fn should_accept_boxed_endpoints() {
     fn endpoint() -> Box<dyn kanagawa::Endpoint<()>> {
         Box::new(|_| async { Ok("hello world") })

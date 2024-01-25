@@ -3,7 +3,7 @@ use std::pin::Pin;
 use std::sync::atomic::{AtomicUsize, Ordering};
 use std::sync::Arc;
 
-use kv_log_macro::trace;
+use tracing::trace;
 use kanagawa::http::mime;
 use kanagawa::utils::{After, Before};
 use kanagawa::*;
@@ -32,7 +32,7 @@ fn user_loader<'a>(
 ) -> Pin<Box<dyn Future<Output = Result> + Send + 'a>> {
     Box::pin(async {
         if let Some(user) = request.state().find_user().await {
-            trace!("user loaded", {user: user.name});
+            trace!(user = user.name, "user loaded");
             request.set_ext(user);
             Ok(next.run(request).await)
         // this middleware only needs to run before the endpoint, so
@@ -65,7 +65,7 @@ struct RequestCount(usize);
 impl<State: Clone + Send + Sync + 'static> Middleware<State> for RequestCounterMiddleware {
     async fn handle(&self, mut req: Request<State>, next: Next<'_, State>) -> Result {
         let count = self.requests_counted.fetch_add(1, Ordering::Relaxed);
-        trace!("request counter", { count: count });
+        trace!(count = count, "request counter");
         req.set_ext(RequestCount(count));
 
         let mut res = next.run(req).await;
@@ -91,7 +91,8 @@ const INTERNAL_SERVER_ERROR_HTML_PAGE: &str = "<html><body>
 </body></html>";
 
 
-async fn server() -> Result<()> {
+#[nuclei::main]
+async fn main() -> Result<()> {
     let mut app = kanagawa::with_state(UserDatabase);
 
     app.with(After(|response: Response| async move {
@@ -131,8 +132,4 @@ async fn server() -> Result<()> {
 
     app.listen("127.0.0.1:8080").await?;
     Ok(())
-}
-
-fn main() -> Result<()> {
-    block_on(server())
 }

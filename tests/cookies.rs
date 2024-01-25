@@ -62,7 +62,7 @@ async fn make_request(endpoint: &str) -> http_types::Response {
     res
 }
 
-#[async_std::test]
+#[nuclei::test]
 async fn successfully_retrieve_request_cookie() {
     let mut res = make_request("/get").await;
     assert_eq!(res.status(), StatusCode::Ok);
@@ -74,14 +74,14 @@ async fn successfully_retrieve_request_cookie() {
     assert_eq!(&body, "RequestCookieValue and also Other;Cookie Value");
 }
 
-#[async_std::test]
+#[nuclei::test]
 async fn successfully_insert_cookie() {
     let res = make_request("/set").await;
     assert_eq!(res.status(), StatusCode::Ok);
     assert_eq!(res[SET_COOKIE], "testCookie=NewCookieValue");
 }
 
-#[async_std::test]
+#[nuclei::test]
 async fn successfully_remove_cookie() {
     let res = make_request("/remove").await;
     assert_eq!(res.status(), StatusCode::Ok);
@@ -94,7 +94,7 @@ async fn successfully_remove_cookie() {
     assert_eq!(cookie.max_age().unwrap().whole_nanoseconds(), 0);
 }
 
-#[async_std::test]
+#[nuclei::test]
 async fn successfully_set_multiple_cookies() {
     let res = make_request("/multi").await;
     assert_eq!(res.status(), StatusCode::Ok);

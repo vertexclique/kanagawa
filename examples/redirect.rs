@@ -1,6 +1,7 @@
 use kanagawa::*;
 
-async fn server() -> Result<()> {
+#[nuclei::main]
+async fn main() -> Result<()> {
     let mut app = kanagawa::new();
     app.with(kanagawa::log::LogMiddleware::new());
     app.at("/").get(|_| async { Ok("Root") });
@@ -24,8 +25,4 @@ async fn server() -> Result<()> {
 
 fn signed_in() -> bool {
     false
-}
-
-fn main() -> Result<()> {
-    block_on(server())
 }

@@ -1,6 +1,6 @@
 use crate::{Body, Endpoint, Request, Response, Result, StatusCode};
 
-use kv_log_macro::{info, warn};
+use tracing::{info, warn};
 
 use std::path::{Path, PathBuf};
 use std::{ffi::OsStr, io};
@@ -86,7 +86,7 @@ mod test {
         crate::Request::new((), request, vec![])
     }
 
-    #[async_std::test]
+    #[nuclei::test]
     async fn ok() {
         let tempdir = tempfile::tempdir().unwrap();
         let serve_dir = serve_dir(&tempdir).unwrap();
@@ -100,7 +100,7 @@ mod test {
         assert_eq!(res.body_string().await.unwrap(), "Foobar");
     }
 
-    #[async_std::test]
+    #[nuclei::test]
     async fn not_found() {
         let tempdir = tempfile::tempdir().unwrap();
         let serve_dir = serve_dir(&tempdir).unwrap();

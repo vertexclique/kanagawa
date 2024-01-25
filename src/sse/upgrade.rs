@@ -6,7 +6,7 @@ use super::Sender;
 use async_std::future::Future;
 use async_std::io::BufReader;
 use async_std::task;
-use kv_log_macro::error;
+use tracing::error;
 
 /// Upgrade an existing HTTP connection to an SSE connection.
 pub fn upgrade<F, Fut, State>(req: Request<State>, handler: F) -> Response

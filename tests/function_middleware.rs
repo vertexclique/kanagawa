@@ -26,7 +26,7 @@ async fn echo_path<State>(req: kanagawa::Request<State>) -> kanagawa::Result<Str
     Ok(req.url().path().to_string())
 }
 
-#[async_std::test]
+#[nuclei::test]
 async fn route_middleware() {
     let mut app = kanagawa::new();
     app.at("/protected").with(auth_middleware).get(echo_path);
@@ -65,7 +65,7 @@ async fn route_middleware() {
     assert_eq!(res.status(), kanagawa::StatusCode::Ok);
 }
 
-#[async_std::test]
+#[nuclei::test]
 async fn app_middleware() {
     let mut app = kanagawa::new();
     app.with(auth_middleware);
