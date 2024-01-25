@@ -24,6 +24,22 @@ repository = "https://github.com/vertexclique/kanagawa"
 features = ["docs"]
 rustdoc-args = ["--cfg", "feature=\"docs\""]
 
+exclude = [
+    ".github/*",
+    "examples/*",
+    "tests/*",
+    "art/*",
+    "ci/*",
+    "k8s/*",
+    "benches/*",
+    "doc/*",
+    "docker/*",
+    "docs/*",
+    "*.png",
+    "*.dot",
+    "*.yml",
+]
+
 [features]
 default = ["h1-server"]
 cookies = ["http-types/cookies"]
