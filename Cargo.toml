@@ -1,6 +1,6 @@
 [package]
 name = "kanagawa"
-version = "0.1.1"
+version = "0.1.2"
 description = "Web framework based on Tide with Proactive IO"
 authors = [
     "Theo M. Bulut <vertexclique@gmail.com>",
