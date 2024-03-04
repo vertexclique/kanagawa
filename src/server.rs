@@ -211,7 +211,7 @@ where
     pub async fn listen<T: ToSocketAddrs>(self, listener: T) -> Result<()> {
         let mut listener = Handle::<TcpListener>::bind(listener)?;
         let host = format!("http://{}", listener.get_ref().local_addr()?);
-        println!("Listening on {}", host);
+        info!("Listening on {}", host);
 
         cfg_if::cfg_if! {
             if #[cfg(target_os = "linux")] {
